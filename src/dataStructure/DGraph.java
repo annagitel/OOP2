@@ -3,6 +3,13 @@ package dataStructure;
 import java.util.Collection;
 
 public class DGraph implements graph{
+/************constractors***************************/
+	public DGraph(){
+
+	}
+	public DGraph (String fileName){
+
+	}
 
 	@Override
 	public node_data getNode(int key) {
