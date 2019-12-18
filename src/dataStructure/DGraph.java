@@ -1,8 +1,11 @@
 package dataStructure;
 
 import java.util.Collection;
+import java.util.LinkedList;
 
 public class DGraph implements graph{
+	LinkedList<EdgeData> edges;
+	LinkedList<NodeData> nodes;
 /************constractors***************************/
 	public DGraph(){
 
@@ -25,14 +28,12 @@ public class DGraph implements graph{
 
 	@Override
 	public void addNode(node_data n) {
-		// TODO Auto-generated method stub
-		
+		nodes.add(new NodeData((NodeData) n));
 	}
 
 	@Override
 	public void connect(int src, int dest, double w) {
-		// TODO Auto-generated method stub
-		
+		edges.add(new EdgeData(src, dest, w));
 	}
 
 	@Override
@@ -61,14 +62,12 @@ public class DGraph implements graph{
 
 	@Override
 	public int nodeSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return nodes.size();
 	}
 
 	@Override
 	public int edgeSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return edges.size();
 	}
 
 	@Override

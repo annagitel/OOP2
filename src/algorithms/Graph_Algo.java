@@ -1,5 +1,5 @@
 package algorithms;
-
+// add priority queue and comperator for him. bts algo.
 import java.util.List;
 
 import dataStructure.graph;
@@ -7,7 +7,7 @@ import dataStructure.node_data;
 /**
  * This empty class represents the set of graph-theory algorithms
  * which should be implemented as part of Ex2 - Do edit this class.
- * @author 
+ * @author Anna
  *
  */
 public class Graph_Algo implements graph_algorithms{
@@ -44,6 +44,7 @@ public class Graph_Algo implements graph_algorithms{
 
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
+		// add priority queue and comperator for him. bts algo.
 		// TODO Auto-generated method stub
 		return null;
 	}
