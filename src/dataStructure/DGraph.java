@@ -1,11 +1,13 @@
 package dataStructure;
 
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.LinkedList;
 
 public class DGraph implements graph{
-	LinkedList<EdgeData> edges;
-	LinkedList<NodeData> nodes;
+	private Hashtable<Integer, Hashtable<Integer, edge_data>> edges;
+	private Hashtable<Integer, node_data> nodes;
+	private int nodeCount = 0;
 /************constractors***************************/
 	public DGraph(){
 
@@ -16,24 +18,29 @@ public class DGraph implements graph{
 
 	@Override
 	public node_data getNode(int key) {
-		// TODO Auto-generated method stub
-		return null;
+		return nodes.get(key);
 	}
 
 	@Override
 	public edge_data getEdge(int src, int dest) {
-		// TODO Auto-generated method stub
-		return null;
+		return edges.get(src).get(dest);
 	}
 
 	@Override
 	public void addNode(node_data n) {
-		nodes.add(new NodeData((NodeData) n));
+		nodes.put(nodeCount, n);
 	}
 
 	@Override
 	public void connect(int src, int dest, double w) {
-		edges.add(new EdgeData(src, dest, w));
+		EdgeData ed = new EdgeData(src,dest,w);
+		if (edges.containsKey(src)){
+			edges.get(src).put(dest,ed);
+		}
+		else {
+			edges.put(src,new Hashtable<>());
+			edges.get(src).put(dest,ed);
+		}
 	}
 
 	@Override
@@ -50,14 +57,23 @@ public class DGraph implements graph{
 
 	@Override
 	public node_data removeNode(int key) {
-		// TODO Auto-generated method stub
-		return null;
+		NodeData n = (NodeData) nodes.get(key);
+		nodes.remove(key);
+
+		if(edges.containsKey(key)){
+			edges.remove(key);
+		}
+		return n;
 	}
 
 	@Override
 	public edge_data removeEdge(int src, int dest) {
-		// TODO Auto-generated method stub
-		return null;
+		EdgeData e = (EdgeData) edges.get(src).get(dest);
+		edges.get(src).remove(dest);
+		if (edges.get(src).isEmpty())
+			edges.remove(src);
+
+		return e;
 	}
 
 	@Override

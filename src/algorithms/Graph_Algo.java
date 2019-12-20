@@ -2,6 +2,7 @@ package algorithms;
 // add priority queue and comperator for him. bts algo.
 import java.util.List;
 
+import dataStructure.DGraph;
 import dataStructure.graph;
 import dataStructure.node_data;
 /**
@@ -11,11 +12,10 @@ import dataStructure.node_data;
  *
  */
 public class Graph_Algo implements graph_algorithms{
-
+	DGraph dg = new DGraph();
 	@Override
 	public void init(graph g) {
-		// TODO Auto-generated method stub
-		
+		this.dg = (DGraph) g;
 	}
 
 	@Override

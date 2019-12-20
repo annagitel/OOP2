@@ -10,18 +10,12 @@ public class NodeData implements node_data{
     private int tag;
 
     /******** constarctors **********/
+
     public NodeData(int k, Point3D p, double w, int t){
         this.key = k;
         this.location = p;
         this.weight = w;
         this.tag = t;
-    }
-
-    public NodeData(NodeData n){
-        this.key = n.getKey();
-        this.location = n.getLocation();
-        this.weight = n.getWeight();
-        this.tag = n.getTag();
     }
 
     public NodeData(){
@@ -36,6 +30,11 @@ public class NodeData implements node_data{
         this.location = p;
         this.weight = w;
         this.tag =  0;
+    }
+
+    public NodeData(String s){
+        this.location = new Point3D(s.substring(0,s.indexOf(',')));
+        this.weight = Double.parseDouble(s.substring(s.indexOf(',')+1,s.length()));
     }
 
     /********* public methods ********/
@@ -71,7 +70,8 @@ public class NodeData implements node_data{
 
     @Override
     public void setInfo(String s) {
-        // yani init fron string. kus emek;
+        this.location = new Point3D(s.substring(0,s.indexOf(',')));
+        this.weight = Double.parseDouble(s.substring(s.indexOf(',')+1,s.length()));
     }
 
     @Override

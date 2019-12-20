@@ -14,39 +14,30 @@ public class EdgeData implements edge_data {
         this.tag = 0;
     }
 
-
     /*********** public methods ****************/
-    @Override
     public int getSrc() {
         return this.source;
     }
 
-    @Override
     public int getDest() {
         return this.destination;
     }
 
-    @Override
     public double getWeight() {
         return this.weight;
     }
 
-    @Override
-    public String getInfo() {
-        return ("Source: "+this.source+"\n Destination: "+this.destination+"\n Weight: "+this.weight+"\n Tag: "+this.tag);
-    }
-
-    @Override
-    public void setInfo(String s) {
-        //yani init from string kus emek;
-    }
-
-    @Override
     public int getTag() {
         return this.tag;
     }
 
-    @Override
+    public String getInfo() {
+        return ("Source: "+this.source+"\n Destination: "+this.destination+"\n Weight: "+this.weight+"\n Tag: "+this.tag);
+    }
+
+    public void setInfo(String s) {
+    }
+
     public void setTag(int t) {
         this.tag = t;
     }
