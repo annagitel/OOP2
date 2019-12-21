@@ -1,5 +1,6 @@
 package algorithms;
 // add priority queue and comperator for him. bts algo.
+import java.util.LinkedList;
 import java.util.List;
 
 import dataStructure.DGraph;
@@ -45,8 +46,11 @@ public class Graph_Algo implements graph_algorithms{
 	@Override
 	public List<node_data> shortestPath(int src, int dest) {
 		// add priority queue and comperator for him. bts algo.
-		// TODO Auto-generated method stub
-		return null;
+		LinkedList<node_data> nl = new LinkedList<node_data>();
+
+
+		
+		return nl;
 	}
 
 	@Override

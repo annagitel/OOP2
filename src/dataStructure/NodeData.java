@@ -2,7 +2,6 @@ package dataStructure;
 
 import utils.Point3D;
 
-import java.io.IOException;
 
 public class NodeData implements node_data{
     /********** private vars **************/
@@ -13,11 +12,11 @@ public class NodeData implements node_data{
 
     /******** constarctors **********/
 
-    public NodeData(int k, Point3D p, double w, int t){
-        this.key = k;
+    public NodeData(int k, Point3D p, double w){
+        this.key = Math.abs(k);
         this.location = p;
-        this.weight = w;
-        this.tag = t;
+        this.weight = Math.abs(w);
+        this.tag = 0;
     }
 
     public NodeData(){
@@ -75,18 +74,19 @@ public class NodeData implements node_data{
     public void setInfo(String s) {
         String str = s.replace(" ","");
         if (isValid(str)){
-            this.location = new Point3D(s.substring(0,s.indexOf(',')));
-            this.weight = Double.parseDouble(s.substring(s.indexOf(',')+1,s.length()));
+            this.location = new Point3D(str.substring(1,str.indexOf(')')));
+            this.weight = Double.parseDouble(str.substring(str.indexOf(')')+2,str.length()));
         }
     }
 
     public void setTag(int t) {
-        this.tag = t;
+        if (t==0 || t==1 || t==2)
+            this.tag = t;
     }
 
     private boolean isValid(String s){
         try {
-            Point3D p = new Point3D(s.substring(0,s.indexOf(',')));
+            Point3D p = new Point3D(s.substring(1,s.indexOf(')')));
             double w = Double.parseDouble(s.substring(s.indexOf(',')+1,s.length()));
         }
         catch (Exception e){
