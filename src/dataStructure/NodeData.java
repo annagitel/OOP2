@@ -2,8 +2,10 @@ package dataStructure;
 
 import utils.Point3D;
 
+import java.io.IOException;
+
 public class NodeData implements node_data{
-    /********** vars **************/
+    /********** private vars **************/
     private int key;
     private Point3D location;
     private double weight;
@@ -33,8 +35,11 @@ public class NodeData implements node_data{
     }
 
     public NodeData(String s){
-        this.location = new Point3D(s.substring(0,s.indexOf(',')));
-        this.weight = Double.parseDouble(s.substring(s.indexOf(',')+1,s.length()));
+        this.key = 0;
+        this.location = new Point3D(0,0,0);
+        this.weight = 0;
+        this.tag = 0;
+        this.setInfo(s);
     }
 
     /********* public methods ********/
@@ -68,11 +73,28 @@ public class NodeData implements node_data{
     }
 
     public void setInfo(String s) {
-        this.location = new Point3D(s.substring(0,s.indexOf(',')));
-        this.weight = Double.parseDouble(s.substring(s.indexOf(',')+1,s.length()));
+        String str = s.replace(" ","");
+        if (isValid(str)){
+            this.location = new Point3D(s.substring(0,s.indexOf(',')));
+            this.weight = Double.parseDouble(s.substring(s.indexOf(',')+1,s.length()));
+        }
     }
 
     public void setTag(int t) {
         this.tag = t;
     }
+
+    private boolean isValid(String s){
+        try {
+            Point3D p = new Point3D(s.substring(0,s.indexOf(',')));
+            double w = Double.parseDouble(s.substring(s.indexOf(',')+1,s.length()));
+        }
+        catch (Exception e){
+            return false;
+        }
+        finally {
+            return true;
+        }
+    }
+
 }
