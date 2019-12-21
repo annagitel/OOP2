@@ -1,5 +1,7 @@
 package dataStructure;
 
+import utils.Point3D;
+
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -7,8 +9,10 @@ import java.util.LinkedList;
 public class DGraph implements graph{
 	private Hashtable<Integer, Hashtable<Integer, edge_data>> edges;
 	private Hashtable<Integer, node_data> nodes;
+	private int modeCount =0;
 	private int nodeCount = 0;
-/************constractors***************************/
+
+	/************constractors***************************/
 	public DGraph(){
 
 	}
@@ -29,12 +33,20 @@ public class DGraph implements graph{
 	@Override
 	public void addNode(node_data n) {
 		nodes.put(nodeCount, n);
+		nodeCount ++;
+	}
+
+	public void addNode(Point3D l, double w){
+		NodeData n = new NodeData(nodeCount,l,w,0);
+		this.addNode(n);
 	}
 
 	@Override
 	public void connect(int src, int dest, double w) {
 		EdgeData ed = new EdgeData(src,dest,w);
 		if (edges.containsKey(src)){
+			if (edges.get(src).containsKey(dest))
+				System.out.println("The nodes are already connected.");
 			edges.get(src).put(dest,ed);
 		}
 		else {
@@ -45,14 +57,14 @@ public class DGraph implements graph{
 
 	@Override
 	public Collection<node_data> getV() {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<node_data> c = nodes.values();
+		return c;
 	}
 
 	@Override
 	public Collection<edge_data> getE(int node_id) {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<edge_data> c =edges.get(node_id).values();
+		return c;
 	}
 
 	@Override
@@ -88,8 +100,7 @@ public class DGraph implements graph{
 
 	@Override
 	public int getMC() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.modeCount;
 	}
 
 }

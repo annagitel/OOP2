@@ -38,48 +38,40 @@ public class NodeData implements node_data{
     }
 
     /********* public methods ********/
-    @Override
+
     public int getKey() {
         return this.key;
     }
 
-    @Override
     public Point3D getLocation() {
         return this.location;
     }
 
-    @Override
-    public void setLocation(Point3D p) {
-        this.location = new Point3D(p);
-    }
-
-    @Override
     public double getWeight() {
         return this.weight;
     }
 
-    @Override
-    public void setWeight(double w) {
-        this.weight = w;
+    public int getTag() {
+        return this.tag;
     }
 
-    @Override
     public String getInfo() {
         return ("Node number: "+this.key+"\n Location: "+this.location.toString()+"\n Weight: "+this.weight+"\n"+"Tag: "+tag);
     }
 
-    @Override
+    public void setLocation(Point3D p) {
+        this.location = new Point3D(p);
+    }
+
+    public void setWeight(double w) {
+        this.weight = w;
+    }
+
     public void setInfo(String s) {
         this.location = new Point3D(s.substring(0,s.indexOf(',')));
         this.weight = Double.parseDouble(s.substring(s.indexOf(',')+1,s.length()));
     }
 
-    @Override
-    public int getTag() {
-        return this.tag;
-    }
-
-    @Override
     public void setTag(int t) {
         this.tag = t;
     }
