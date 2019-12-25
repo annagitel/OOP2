@@ -38,12 +38,14 @@ public interface graph_algorithms {
 	 * @param file_name
 	 */
 	public void save(String file_name);
-/**
+
+	/**
  * Returns true if and only if (iff) there is a valid path from EVREY node to each
  * other node. NOTE: assume directional graph - a valid path (a-->b) does NOT imply a valid path (b-->a).
  * @return
  */
 	public boolean isConnected();
+
 	/**
 	 * returns the length of the shortest path between src to dest
 	 * @param src - start node
@@ -51,6 +53,7 @@ public interface graph_algorithms {
 	 * @return
 	 */
 	public double shortestPathDist(int src, int dest);
+
 	/**
 	 * returns the the shortest path between src to dest - as an ordered List of nodes:
 	 * src--> n1-->n2-->...dest
@@ -60,6 +63,7 @@ public interface graph_algorithms {
 	 * @return
 	 */
 	public List<node_data> shortestPath(int src, int dest);
+
 	/**
 	 * computes a relatively short path which visit each node in the targets List.
 	 * Note: this is NOT the classical traveling salesman problem, 

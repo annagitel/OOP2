@@ -12,31 +12,31 @@ public class NodeData implements node_data{
 
     /******** constarctors **********/
 
-    public NodeData(int k, Point3D p, double w){
+    public NodeData(int k, Point3D p){
         this.key = Math.abs(k);
         this.location = p;
-        this.weight = Math.abs(w);
+        this.weight = Double.MAX_VALUE;
         this.tag = 0;
     }
 
     public NodeData(){
         this.key = 0;
         this.location = new Point3D(0,0,0);
-        this.weight = 0;
+        this.weight = Double.MAX_VALUE;
         this.tag = 0;
     }
 
-    public NodeData(Point3D p, double w){
+    public NodeData(Point3D p){
         this.key = 0;
         this.location = p;
-        this.weight = w;
+        this.weight = Double.MAX_VALUE;
         this.tag =  0;
     }
 
     public NodeData(String s){
         this.key = 0;
         this.location = new Point3D(0,0,0);
-        this.weight = 0;
+        this.weight = Double.MAX_VALUE;
         this.tag = 0;
         this.setInfo(s);
     }

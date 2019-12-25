@@ -1,25 +1,47 @@
 package dataStructure;
 
 import utils.Point3D;
-import java.util.Collection;
-import java.util.Hashtable;
 
-public class DGraph implements graph{
-	private Hashtable<Integer, Hashtable<Integer, edge_data>> edges;
-	private Hashtable<Integer, node_data> nodes;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+
+
+public class DGraph implements graph {
+	private HashMap<Integer, HashMap<Integer, edge_data>> edges;
+	private HashMap<Integer, node_data> nodes;
 	public int modeCount =0;
 	private int nodeCount = 0;
 
 	/************constractors***************************/
 	public DGraph(){
-
+		this.nodes = new HashMap<>();
+		this.edges = new HashMap<>();
 	}
 
 	public DGraph (String fileName){
 
 	}
 
-	public DGraph(graph g){}
+	public DGraph(graph g){
+		Collection<node_data> n = g.getV();
+		Iterator<node_data> it = n.iterator();
+		while (it.hasNext()){
+			this.addNode(it.next());
+		}
+
+		Iterator<node_data> nit = this.getV().iterator();
+		while (nit.hasNext()){
+			Collection<edge_data> e = g.getE(nit.next().getTag());
+			Iterator<edge_data> eit = e.iterator();
+			while (eit.hasNext()){
+				edge_data current = eit.next();
+				this.connect(current.getSrc(), current.getDest(), current.getWeight());
+			}
+		}
+	}
 
 	/********** public methods ************************/
 	public node_data getNode(int key) {
@@ -31,15 +53,15 @@ public class DGraph implements graph{
 	}
 
 	public void addNode(node_data n) {
-		if (!nodes.containsKey(n.getKey())){
-			nodes.put(nodeCount, n);
-			nodeCount++;
-		}
+		NodeData newn = new NodeData(nodeCount, n.getLocation());
+		this.nodes.put(this.nodeCount, newn);
+		this.nodeCount++;
 	}
 
-	public void addNode(Point3D l, double w){
-		NodeData n = new NodeData(nodeCount,l,w);
-		this.addNode(n);
+	public void addNode(Point3D l){
+		NodeData newn = new NodeData(nodeCount, l);
+		this.nodes.put(this.nodeCount, newn);
+		this.nodeCount++;
 	}
 
 	public void connect(int src, int dest, double w) {
@@ -47,10 +69,11 @@ public class DGraph implements graph{
 		if (edges.containsKey(src)){
 			if (edges.get(src).containsKey(dest))
 				System.out.println("The nodes are already connected.");
-			edges.get(src).put(dest,ed);
+			else
+				edges.get(src).put(dest,ed);
 		}
 		else {
-			edges.put(src,new Hashtable<>());
+			edges.put(src, new HashMap<>());
 			edges.get(src).put(dest,ed);
 		}
 	}
@@ -61,7 +84,16 @@ public class DGraph implements graph{
 	}
 
 	public Collection<edge_data> getE(int node_id) {
-		Collection<edge_data> c =edges.get(node_id).values();
+		if(this.edges.containsKey(node_id)) {
+			Collection<edge_data> c = this.edges.get(node_id).values();
+			return c;
+		}
+		else
+			return null;
+	}
+
+	public Collection<Integer> nodesWithEdges(){
+		Collection<Integer> c = edges.keySet();
 		return c;
 	}
 

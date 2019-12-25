@@ -8,12 +8,12 @@ public class nodeDataTest {
 
     @Test
     public void getTest(){
-        NodeData n1 = new NodeData("(5,6,7),4.0");
-        NodeData n2 = new NodeData("(-3,5,100) , 78.5");
-        NodeData n3 = new NodeData(n2.getLocation(), n1.getWeight());
-        NodeData n4 = new NodeData(n1.getLocation(), n2.getWeight());
+        NodeData n1 = new NodeData("(5,6,7)");
+        NodeData n2 = new NodeData("(-3,5,100)");
+        NodeData n3 = new NodeData(n2.getLocation());
+        NodeData n4 = new NodeData(n1.getLocation());
         NodeData n5 = new NodeData();
-        NodeData n6 = new NodeData(-9, n5.getLocation(),-90);
+        NodeData n6 = new NodeData(-9, n5.getLocation());
 
         assertEquals(n1.getLocation().toString(), "5.0,6.0,7.0");
         assertEquals(n1.getWeight(), n3.getWeight());
