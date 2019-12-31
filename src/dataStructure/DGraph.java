@@ -1,11 +1,8 @@
 package dataStructure;
 
 import utils.Point3D;
-
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 
 
@@ -13,19 +10,20 @@ public class DGraph implements graph {
 	private HashMap<Integer, HashMap<Integer, edge_data>> edges;
 	private HashMap<Integer, node_data> nodes;
 	public int modeCount =0;
-	private int nodeCount = 0;
+	private int nodeCount = 1;
 
-	/************constractors***************************/
-	public DGraph(){
+	/************constractors*****************/
+
+	public DGraph(){ //empty constructor
 		this.nodes = new HashMap<>();
 		this.edges = new HashMap<>();
 	}
 
-	public DGraph (String fileName){
+	public DGraph (String fileName){ //init from file
 
 	}
 
-	public DGraph(graph g){
+	public DGraph(graph g){ //copy constructor
 		Collection<node_data> n = g.getV();
 		Iterator<node_data> it = n.iterator();
 		while (it.hasNext()){
@@ -34,16 +32,25 @@ public class DGraph implements graph {
 
 		Iterator<node_data> nit = this.getV().iterator();
 		while (nit.hasNext()){
-			Collection<edge_data> e = g.getE(nit.next().getTag());
-			Iterator<edge_data> eit = e.iterator();
-			while (eit.hasNext()){
-				edge_data current = eit.next();
-				this.connect(current.getSrc(), current.getDest(), current.getWeight());
+			Collection<edge_data> e = g.getE(nit.next().getKey());
+			if( e != null){
+				Iterator<edge_data> eit = e.iterator();
+				while (eit.hasNext()){
+					edge_data current = eit.next();
+					this.connect(current.getSrc(), current.getDest(), current.getWeight());
+				}
 			}
 		}
 	}
 
-	/********** public methods ************************/
+	public DGraph(node_data n){ // init with one node
+		this.nodes = new HashMap<>();
+		this.edges = new HashMap<>();
+		this.nodes.put(nodeCount, n);
+		this.nodeCount++;
+	}
+
+	/********** public methods ******************/
 	public node_data getNode(int key) {
 		return nodes.get(key);
 	}

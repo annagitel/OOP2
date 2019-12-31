@@ -27,6 +27,10 @@ package utils;
  *
  ******************************************************************************/
 
+import algorithms.Graph_Algo;
+import algorithms.graph_algorithms;
+import dataStructure.*;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.FileDialog;
@@ -62,9 +66,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import java.util.LinkedList;
-import java.util.TreeSet;
-import java.util.NoSuchElementException;
+import java.util.*;
 import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
@@ -479,7 +481,7 @@ import javax.swing.KeyStroke;
  *  @author Kevin Wayne
  */
 public final class StdDraw implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
-
+	public static DGraph gui_graph = new DGraph();
 	/**
 	 *  The color black.
 	 */
@@ -669,7 +671,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		height = canvasHeight;
 		init();
 	}
-
+/****************************************************************************************************************************************************************/
 	// init
 	private static void init() {
 		if (frame != null) frame.setVisible(false);
@@ -715,15 +717,97 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	// create the menu bar (changed to private)
 	private static JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = new JMenu("File");
-		menuBar.add(menu);
-		JMenuItem menuItem1 = new JMenuItem(" Save...   ");
-		menuItem1.addActionListener(std);
-		menuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+		JMenu file = new JMenu("File");
+		JMenu algo = new JMenu("Algo");
+		menuBar.add(file);
+		menuBar.add(algo);
+		JMenuItem fileItem1 = new JMenuItem(" Save to file ");
+		JMenuItem fileItem2 = new JMenuItem(" Open from file ");
+		JMenuItem algoItem1 = new JMenuItem(" Is graph connected? ");
+		JMenuItem algoItem2 = new JMenuItem(" Shortest path");
+		JMenuItem algoItem3 = new JMenuItem(" TSP ");
+		algoItem1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		fileItem1.addActionListener(std);
+		fileItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		menu.add(menuItem1);
+		file.add(fileItem1);
+		file.add(fileItem2);
+		algo.add(algoItem1);
+		algo.add(algoItem2);
+		algo.add(algoItem3);
 		return menuBar;
 	}
+
+	public static void drawGraph(int width, int height, Range rx, Range ry, int resolution, graph g) {
+		StdDraw.setCanvasSize(width,height);                                           // set canvas size
+		StdDraw.setYscale(ry.get_min(),ry.get_max());                                  // set X line
+		StdDraw.setXscale(rx.get_min(),rx.get_max());                                  // set Y line
+		drawWithColors(g, Color.yellow, Color.black);
+	}
+
+	private static void drawWithColors(graph g, Color nodeColor, Color edgeColor){
+		Collection<node_data> nodes = g.getV();
+		Iterator<node_data> it = nodes.iterator();
+		StdDraw.setPenColor(StdDraw.BLACK);
+		StdDraw.setPenRadius(0.005);
+		Iterator<node_data> nit = g.getV().iterator();
+		while (nit.hasNext()){
+			Collection<edge_data> e = g.getE(nit.next().getKey());
+			if (e != null){
+				Iterator<edge_data> eit = e.iterator();
+				while (eit.hasNext()) {
+					edge_data current = eit.next();
+					NodeData s = (NodeData) g.getNode(current.getSrc());
+					NodeData d = (NodeData) g.getNode(current.getDest());
+					StdDraw.line(s.getLocation().x(), s.getLocation().y(), d.getLocation().x(), d.getLocation().y());
+					StdDraw.text((s.getLocation().x()+d.getLocation().x())/2, (s.getLocation().y()+d.getLocation().y())/2, String.format("%.1f", current.getWeight()));
+				}
+			}
+		}
+		while (it.hasNext()){
+			node_data current = it.next();
+			drawNode(current, Color.yellow);
+		}
+	}
+	public static void drawNode(node_data n, Color nodeColor){
+		StdDraw.setPenRadius(0.001);                                                   // set pen radius
+		StdDraw.setPenColor(nodeColor);
+		StdDraw.filledCircle(n.getLocation().x(), n.getLocation().y(), 3);
+		StdDraw.setPenColor(Color.black);
+		StdDraw.setPenRadius(0.005);
+		StdDraw.circle(n.getLocation().x(), n.getLocation().y(), 3);
+		StdDraw.text(n.getLocation().x(), n.getLocation().y(), String.valueOf(n.getKey()));
+	}
+	private static void drawEdge(edge_data e, Color edgeColor){}
+	public static void isConnectedDraw(){
+		graph_algorithms ga = new Graph_Algo();
+		ga.init(gui_graph);
+		if(ga.isConnected()){
+			drawWithColors(gui_graph, Color.green, Color.green);
+		}
+		else
+			drawWithColors(gui_graph,Color.red,Color.red);
+	}
+
+	public static void shortestDraw(graph_algorithms g, node_data a, node_data b){
+		graph_algorithms ga = new Graph_Algo();
+		ga.init(gui_graph);
+		LinkedList<node_data> list = (LinkedList<node_data>) ga.shortestPath(a.getKey(),b.getKey());
+
+
+	}
+
+	public static void tspDraw(LinkedList<Integer> intList ){
+		graph_algorithms ga = new Graph_Algo();
+		ga.init(gui_graph);
+		LinkedList<node_data> list = (LinkedList<node_data>) ga.TSP(intList);
+	}
+
 
 
 	/***************************************************************************
