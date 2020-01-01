@@ -482,6 +482,11 @@ import javax.swing.KeyStroke;
  */
 public final class StdDraw implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
 	public static DGraph gui_graph = new DGraph();
+	public static Graph_Algo gui_algo = new Graph_Algo();
+	public static void setGraph(graph g){
+		gui_graph = (DGraph) g;
+		gui_algo.init(g);
+	}
 	/**
 	 *  The color black.
 	 */
@@ -664,6 +669,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	 * @throws IllegalArgumentException unless both {@code canvasWidth} and
 	 *         {@code canvasHeight} are positive
 	 */
+	/*****************************************************************************************************************/
 	public static void setCanvasSize(int canvasWidth, int canvasHeight) {
 		if (canvasWidth <= 0 || canvasHeight <= 0)
 			throw new IllegalArgumentException("width and height must be positive");
@@ -671,7 +677,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		height = canvasHeight;
 		init();
 	}
-/****************************************************************************************************************************************************************/
+
 	// init
 	private static void init() {
 		if (frame != null) frame.setVisible(false);
@@ -743,63 +749,76 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		return menuBar;
 	}
 
-	public static void drawGraph(int width, int height, Range rx, Range ry, int resolution, graph g) {
+	public static void drawGraph(int width, int height, Range rx, Range ry, graph g) {
+		setGraph(g);
 		StdDraw.setCanvasSize(width,height);                                           // set canvas size
 		StdDraw.setYscale(ry.get_min(),ry.get_max());                                  // set X line
 		StdDraw.setXscale(rx.get_min(),rx.get_max());                                  // set Y line
-		drawWithColors(g, Color.yellow, Color.black);
+		drawWithColors(Color.yellow, Color.black);
 	}
 
-	private static void drawWithColors(graph g, Color nodeColor, Color edgeColor){
-		Collection<node_data> nodes = g.getV();
+	private static void drawWithColors(Color nodeColor, Color edgeColor){
+		Collection<node_data> nodes = gui_graph.getV();
 		Iterator<node_data> it = nodes.iterator();
 		StdDraw.setPenColor(StdDraw.BLACK);
 		StdDraw.setPenRadius(0.005);
-		Iterator<node_data> nit = g.getV().iterator();
+		Iterator<node_data> nit = gui_graph.getV().iterator();
 		while (nit.hasNext()){
-			Collection<edge_data> e = g.getE(nit.next().getKey());
+			Collection<edge_data> e = gui_graph.getE(nit.next().getKey());
 			if (e != null){
 				Iterator<edge_data> eit = e.iterator();
 				while (eit.hasNext()) {
 					edge_data current = eit.next();
-					NodeData s = (NodeData) g.getNode(current.getSrc());
-					NodeData d = (NodeData) g.getNode(current.getDest());
-					StdDraw.line(s.getLocation().x(), s.getLocation().y(), d.getLocation().x(), d.getLocation().y());
-					StdDraw.text((s.getLocation().x()+d.getLocation().x())/2, (s.getLocation().y()+d.getLocation().y())/2, String.format("%.1f", current.getWeight()));
+					drawEdge(current, edgeColor);
 				}
 			}
 		}
 		while (it.hasNext()){
 			node_data current = it.next();
-			drawNode(current, Color.yellow);
+			drawNode(current, nodeColor);
 		}
 	}
 	public static void drawNode(node_data n, Color nodeColor){
 		StdDraw.setPenRadius(0.001);                                                   // set pen radius
 		StdDraw.setPenColor(nodeColor);
-		StdDraw.filledCircle(n.getLocation().x(), n.getLocation().y(), 3);
+		StdDraw.filledCircle(n.getLocation().x(), n.getLocation().y(), 0.5);
 		StdDraw.setPenColor(Color.black);
-		StdDraw.setPenRadius(0.005);
-		StdDraw.circle(n.getLocation().x(), n.getLocation().y(), 3);
+		StdDraw.setPenRadius(0.001);
+		StdDraw.circle(n.getLocation().x(), n.getLocation().y(), 0.5);
 		StdDraw.text(n.getLocation().x(), n.getLocation().y(), String.valueOf(n.getKey()));
 	}
-	private static void drawEdge(edge_data e, Color edgeColor){}
+	private static void drawEdge(edge_data e, Color edgeColor){
+		NodeData s = (NodeData) gui_graph.getNode(e.getSrc());
+		NodeData d = (NodeData) gui_graph.getNode(e.getDest());
+		StdDraw.setPenColor(edgeColor);
+		StdDraw.line(s.getLocation().x(), s.getLocation().y(), d.getLocation().x(), d.getLocation().y());
+		StdDraw.setPenColor(Color.black);
+		StdDraw.text((s.getLocation().x()+d.getLocation().x())/2, (s.getLocation().y()+d.getLocation().y())/2, String.format("%.1f", e.getWeight()));
+		double tempx = (s.getLocation().x()+d.getLocation().x())/2;
+		double tempy = (s.getLocation().y()+d.getLocation().y())/2;
+		tempx = (tempx+d.getLocation().x())/2;
+		tempy = (tempy+d.getLocation().y())/2;
+		tempx = (tempx+d.getLocation().x())/2;
+		tempy = (tempy+d.getLocation().y())/2;
+		StdDraw.circle(tempx, tempy, 0.2);
+	}
+
+	/****************algo draws ******************************************/
 	public static void isConnectedDraw(){
 		graph_algorithms ga = new Graph_Algo();
 		ga.init(gui_graph);
 		if(ga.isConnected()){
-			drawWithColors(gui_graph, Color.green, Color.green);
+			drawWithColors(Color.green, Color.green);
 		}
 		else
-			drawWithColors(gui_graph,Color.red,Color.red);
+			drawWithColors(Color.red,Color.red);
 	}
 
-	public static void shortestDraw(graph_algorithms g, node_data a, node_data b){
-		graph_algorithms ga = new Graph_Algo();
-		ga.init(gui_graph);
-		LinkedList<node_data> list = (LinkedList<node_data>) ga.shortestPath(a.getKey(),b.getKey());
-
-
+	public static void shortestDraw(int a, int b){
+		LinkedList<node_data> list = (LinkedList<node_data>) gui_algo.shortestPath(a,b);
+		for (node_data n:list) {
+			drawNode(n, Color.blue);
+		}
 	}
 
 	public static void tspDraw(LinkedList<Integer> intList ){

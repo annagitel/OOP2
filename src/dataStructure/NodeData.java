@@ -9,7 +9,7 @@ public class NodeData implements node_data{
     private Point3D location;
     private double weight;
     private int tag;
-
+    private String info = "false";
     /******** constarctors **********/
 
     public NodeData(int k, Point3D p){
@@ -60,7 +60,7 @@ public class NodeData implements node_data{
     }
 
     public String getInfo() {
-        return ("Node number: "+this.key+"\n Location: "+this.location.toString()+"\n Weight: "+this.weight+"\n"+"Tag: "+tag);
+        return this.info;
     }
 
     public void setLocation(Point3D p) {
@@ -72,11 +72,7 @@ public class NodeData implements node_data{
     }
 
     public void setInfo(String s) {
-        String str = s.replace(" ","");
-        if (isValid(str)){
-            this.location = new Point3D(str.substring(1,str.indexOf(')')));
-            this.weight = Double.parseDouble(str.substring(str.indexOf(')')+2,str.length()));
-        }
+        this.info = s;
     }
 
     public void setTag(int t) {

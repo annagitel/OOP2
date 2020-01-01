@@ -1,8 +1,10 @@
 package algorithms;
-// add priority queue and comperator for him. bts algo.
-import java.util.*;
 
-import com.sun.source.tree.ReturnTree;
+import java.io.*;
+import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+
 import dataStructure.DGraph;
 import dataStructure.edge_data;
 import dataStructure.graph;
@@ -10,77 +12,101 @@ import dataStructure.node_data;
 /**
  * This empty class represents the set of graph-theory algorithms
  * which should be implemented as part of Ex2 - Do edit this class.
- * @author Anna
+ * @author
  *
  */
-public class Graph_Algo implements graph_algorithms{
-	DGraph dg = new DGraph();
-    public Graph_Algo(){}
-	public void init(graph g) {
-		this.dg = new DGraph(g);
-	}
+public class Graph_Algo implements graph_algorithms, Serializable {
+    private graph graph = new DGraph();
 
-	@Override
-	public void init(String file_name) {
+    private Map<node_data, Double> distance = new HashMap<>();
 
-	}
+    @Override
+    public void init(graph g) {
+        this.graph = g;
+    }
 
-	@Override
-	public void save(String file_name) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void init(String file_name) {
+        try {
+            FileInputStream file = new FileInputStream(file_name);
+            ObjectInputStream in = new ObjectInputStream(file);
+            graph g = (graph) in.readObject();
+            init(g);
+            in.close();
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
-	@Override
-	public boolean isConnected() {
-		for (node_data node: dg.getV()) {
-			if (!isCon(node.getKey()))
-				return false;
-			this.zeroTags();
-		}
-		return true;
-	}
+    @Override
+    public void save(String file_name) {
+        try {
+            FileOutputStream file = new FileOutputStream(file_name);
+            ObjectOutputStream out = new ObjectOutputStream(file);
+            out.writeObject(graph);
+            out.close();
+            file.close();
 
-	private boolean isCon (int node_key){
-		changeTags(node_key);
-		for (node_data node: dg.getV()) {
-			if (node.getTag()!= 1)
-				return false;
-		}
-		return true;
-	}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-	private void changeTags (int node_key){
-		for (node_data node: dg.getV()) {
-			int key = node.getKey();
-			for (edge_data edge: dg.getE(key)) {
-				int d = edge.getDest();
-				if (dg.getNode(d).getTag() != 1) {
-					dg.getNode(d).setTag(1);
-					changeTags(d);
-				}
-			}
-		}
-	}
-	
-	private void zeroTags(){
-		Collection<node_data> n = dg.getV();
-		Iterator<node_data> it = n.iterator();
-		while (it.hasNext()){
-			it.next().setTag(0);
-		}
 
-		Iterator<node_data> nit = dg.getV().iterator();
-		while (nit.hasNext()){
-			Collection<edge_data> e = dg.getE(nit.next().getTag());
-			Iterator<edge_data> eit = e.iterator();
-			while (eit.hasNext()){
-				eit.next().setTag(0);
+    }
+    public boolean isConnected() {
+        for (node_data node: graph.getV()) {
+            if (!isCon(node.getKey()))
+                return false;
+            this.zeroTags();
+        }
+        return true;
+    }
 
-			}
-		}
-	}
+    private boolean isCon (int node_key){
+        changeTags(node_key);
+        for (node_data node: graph.getV()) {
+            if (node.getTag()!= 1)
+                return false;
+        }
+        return true;
+    }
 
+    private void changeTags (int node_key){
+        for (node_data node: graph.getV()) {
+            int key = node.getKey();
+            for (edge_data edge: graph.getE(key)) {
+                int d = edge.getDest();
+                if (graph.getNode(d).getTag() != 1) {
+                    graph.getNode(d).setTag(1);
+                    changeTags(d);
+                }
+            }
+        }
+    }
+
+    private void zeroTags(){
+        Collection<node_data> n = graph.getV();
+        Iterator<node_data> it = n.iterator();
+        while (it.hasNext()){
+            it.next().setTag(0);
+        }
+
+        Iterator<node_data> nit = graph.getV().iterator();
+        while (nit.hasNext()){
+            Collection<edge_data> e = graph.getE(nit.next().getTag());
+            if(e != null){
+                Iterator<edge_data> eit = e.iterator();
+                while (eit.hasNext()) {
+                    eit.next().setTag(0);
+                }
+            }
+        }
+    }
+
+    @Override
     public double shortestPathDist(int src, int dest) {
         List<node_data> path= shortestPath(src,dest);
         double answer=0;
@@ -90,28 +116,28 @@ public class Graph_Algo implements graph_algorithms{
         return answer;
     }
     private void setTheSmallWeight(int dest, double w,int whereW){
-        if (dg.getNode(dest).getWeight()>w){
-            dg.getNode(dest).setWeight(w);
-            dg.getNode(dest).setTag(whereW);
+        if (graph.getNode(dest).getWeight()>w){
+            graph.getNode(dest).setWeight(w);
+            graph.getNode(dest).setTag(whereW);
         }
     }
     private double sendTheWeight(int current, edge_data e){
-        return dg.getNode(current).getWeight()+e.getWeight();
+        return graph.getNode(current).getWeight()+e.getWeight();
     }
 
     @Override
     public List<node_data> shortestPath(int src, int dest) {
         List<node_data> answer= new ArrayList<>();
-        PriorityQueue<node_data> q = new PriorityQueue<node_data>(dg.getV().size(), new v_Comp());
-        q.addAll(dg.getV());
+        PriorityQueue<node_data> q = new PriorityQueue<node_data>(graph.getV().size(), new v_Comp());
+        q.addAll(graph.getV());
         node_data current;
-        dg.getNode(src).setWeight(0);
+        graph.getNode(src).setWeight(0);
         while (!q.isEmpty()) {
             current=q.remove();
-            dg.getNode(current.getKey()).setInfo("true");
-            if (dg.getNode(current.getKey())!=null){
-                for (edge_data e: dg.getE(current.getKey())) {
-                    if (dg.getNode(e.getDest()).getInfo() == "false") {
+            graph.getNode(current.getKey()).setInfo("true");
+            if (graph.getNode(current.getKey())!=null){
+                for (edge_data e: graph.getE(current.getKey())) {
+                    if (graph.getNode(e.getDest()).getInfo() == "false") {
                         setTheSmallWeight(e.getDest(), sendTheWeight(current.getKey(), e), current.getKey());
                     }
                 }
@@ -120,13 +146,13 @@ public class Graph_Algo implements graph_algorithms{
 
         }
         Stack<node_data> stack = new Stack<node_data>();
-        stack.push(dg.getNode(dest));
-        int temp=dg.getNode(dest).getTag();//the node before dest
-        stack.push(dg.getNode(temp));
+        stack.push(graph.getNode(dest));
+        int temp=graph.getNode(dest).getTag();//the node before dest
+        stack.push(graph.getNode(temp));
         while (temp!=src){// if we didnt came to src
-            int temp2=dg.getNode(temp).getTag();
+            int temp2=graph.getNode(temp).getTag();
             temp=temp2;
-            stack.push(dg.getNode(temp));
+            stack.push(graph.getNode(temp));
         }
         while (!stack.empty()){
             answer.add(stack.pop());
@@ -134,32 +160,13 @@ public class Graph_Algo implements graph_algorithms{
         return answer;
     }
 
-    private class v_Comp implements Comparator<node_data> {
-        public v_Comp() {
-
-        }
-
-        @Override
-        public int compare(node_data v2, node_data v1) {
-            if (v1.getWeight() - v2.getWeight() > 0)
-                return -1;
-            else return 1;
-        }
-    }
-
-    private double dist(int s, int d){
-		double dist = 0;
-		return dist;
-	}
-
-
-	@Override
+    @Override
     public List<node_data> TSP(List<Integer> targets) {
 
         List<node_data> TSP = new LinkedList<node_data>();
         Iterator<Integer> i = targets.iterator();
         int src=i.next();
-        TSP.add(0,dg.getNode(src));
+        TSP.add(0,graph.getNode(src));
         while(i.hasNext())
         {
             int dest=i.next();
@@ -170,16 +177,17 @@ public class Graph_Algo implements graph_algorithms{
             src=dest;
         }
         return TSP;
+
     }
 
-	@Override
+    @Override
     public graph copy() {
         graph copyGraph = new DGraph();
-        if (this.dg != null) {
-            Collection<node_data> colleOfNodes = dg.getV();
+        if (this.graph != null) {
+            Collection<node_data> colleOfNodes = graph.getV();
             for (node_data node : colleOfNodes) {
                 copyGraph.addNode(node);
-                Collection<edge_data> edges = dg.getE(node.getKey());
+                Collection<edge_data> edges = graph.getE(node.getKey());
                 if (edges != null) {
                     for (edge_data edge : edges) {
                         copyGraph.connect(edge.getSrc(), edge.getDest(), edge.getWeight());
@@ -191,5 +199,15 @@ public class Graph_Algo implements graph_algorithms{
         return copyGraph;
     }
 
+    private class v_Comp implements Comparator<node_data> {
+        public v_Comp() {
+        }
 
+        @Override
+        public int compare(node_data v2, node_data v1) {
+            if (v1.getWeight() - v2.getWeight() > 0)
+                return -1;
+            else return 1;
+        }
+    }
 }

@@ -71,6 +71,12 @@ public class DGraph implements graph {
 		this.nodeCount++;
 	}
 
+	public void addNode(String s){
+		NodeData newn = new NodeData(nodeCount, new Point3D(s));
+		this.nodes.put(this.nodeCount, newn);
+		this.nodeCount++;
+	}
+
 	public void connect(int src, int dest, double w) {
 		EdgeData ed = new EdgeData(src,dest,w);
 		if (edges.containsKey(src)){
