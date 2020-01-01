@@ -97,10 +97,8 @@ public class DGraph implements graph {
 	}
 
 	public Collection<edge_data> getE(int node_id) {
-		if(this.edges.containsKey(node_id)) {
-			Collection<edge_data> c = this.edges.get(node_id).values();
-			return c;
-		}
+		if(this.edges.containsKey(node_id))
+			return this.edges.get(node_id).values();
 		else
 			return null;
 	}

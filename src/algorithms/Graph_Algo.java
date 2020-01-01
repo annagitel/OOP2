@@ -53,9 +53,8 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
+    /****is connected****/
     public boolean isConnected() {
         for (node_data node: graph.getV()) {
             if (!isCon(node.getKey()))
@@ -105,7 +104,7 @@ public class Graph_Algo implements graph_algorithms, Serializable {
             }
         }
     }
-
+    /******shortest********/
     @Override
     public double shortestPathDist(int src, int dest) {
         List<node_data> path= shortestPath(src,dest);
@@ -124,6 +123,11 @@ public class Graph_Algo implements graph_algorithms, Serializable {
     private double sendTheWeight(int current, edge_data e){
         return graph.getNode(current).getWeight()+e.getWeight();
     }
+    private void setTagForSrc(int current){
+        for (edge_data e:graph.getE(current)) {
+            graph.getNode(e.getDest()).setTag(current);
+        }
+    }
 
     @Override
     public List<node_data> shortestPath(int src, int dest) {
@@ -135,7 +139,8 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         while (!q.isEmpty()) {
             current=q.remove();
             graph.getNode(current.getKey()).setInfo("true");
-            if (graph.getNode(current.getKey())!=null){
+            if (graph.getE(current.getKey())!=null){
+                setTagForSrc(current.getKey());
                 for (edge_data e: graph.getE(current.getKey())) {
                     if (graph.getNode(e.getDest()).getInfo() == "false") {
                         setTheSmallWeight(e.getDest(), sendTheWeight(current.getKey(), e), current.getKey());
@@ -148,10 +153,10 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         Stack<node_data> stack = new Stack<node_data>();
         stack.push(graph.getNode(dest));
         int temp=graph.getNode(dest).getTag();//the node before dest
+        System.out.println(temp);/***************print***********/
         stack.push(graph.getNode(temp));
         while (temp!=src){// if we didnt came to src
-            int temp2=graph.getNode(temp).getTag();
-            temp=temp2;
+            temp= graph.getNode(temp).getTag();
             stack.push(graph.getNode(temp));
         }
         while (!stack.empty()){
@@ -159,7 +164,7 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         }
         return answer;
     }
-
+    /********tsp********/
     @Override
     public List<node_data> TSP(List<Integer> targets) {
 

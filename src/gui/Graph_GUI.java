@@ -30,8 +30,8 @@ public class Graph_GUI {
         Range x = new Range(0,25);
         Range y = new Range(0,25);
         StdDraw.drawGraph(500, 500, x,y,g);
-        //StdDraw.shortestDraw(1,5);
+        StdDraw.shortestDraw(1,5);
         //StdDraw.isConnectedDraw();
-        
+
     }
 }
