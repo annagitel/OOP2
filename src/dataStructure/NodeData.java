@@ -76,8 +76,7 @@ public class NodeData implements node_data{
     }
 
     public void setTag(int t) {
-        if (t==0 || t==1 || t==2)
-            this.tag = t;
+        this.tag = t;
     }
 
     private boolean isValid(String s){

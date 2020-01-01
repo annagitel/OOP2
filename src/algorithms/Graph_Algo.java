@@ -136,11 +136,12 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         q.addAll(graph.getV());
         node_data current;
         graph.getNode(src).setWeight(0);
+        setTagForSrc(src);
         while (!q.isEmpty()) {
             current=q.remove();
             graph.getNode(current.getKey()).setInfo("true");
             if (graph.getE(current.getKey())!=null){
-                setTagForSrc(current.getKey());
+
                 for (edge_data e: graph.getE(current.getKey())) {
                     if (graph.getNode(e.getDest()).getInfo() == "false") {
                         setTheSmallWeight(e.getDest(), sendTheWeight(current.getKey(), e), current.getKey());

@@ -815,7 +815,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	}
 
 	public static void shortestDraw(int a, int b){
-		LinkedList<node_data> list = (LinkedList<node_data>) gui_algo.shortestPath(a,b);
+		List<node_data> list = (ArrayList<node_data>) gui_algo.shortestPath(a,b);
 		for (node_data n:list) {
 			drawNode(n, Color.blue);
 		}
