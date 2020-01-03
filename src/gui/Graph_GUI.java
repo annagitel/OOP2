@@ -21,11 +21,12 @@ public class Graph_GUI {
         g.addNode("21,2,0");
 
         g.connect(1,2,2);
-        g.connect(2,4,8);
+        g.connect(2,4,1);
         g.connect(4,5,1);
-        g.connect(1,3,3);
-        g.connect(3,5,4);
-        g.connect(5,1,2);
+        g.connect(1,3,30);
+        g.connect(3,5,40);
+        g.connect(5,1,20);
+        g.connect(1,5,1);
 
         Range x = new Range(0,25);
         Range y = new Range(0,25);

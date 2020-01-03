@@ -19,6 +19,10 @@ public class Graph_Algo implements graph_algorithms, Serializable {
     private graph graph = new DGraph();
 
     private Map<node_data, Double> distance = new HashMap<>();
+    public Graph_Algo(){};
+    public Graph_Algo(graph graph) {
+        init(graph);
+    }
 
     @Override
     public void init(graph g) {

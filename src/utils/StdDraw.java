@@ -793,7 +793,6 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		StdDraw.setPenColor(edgeColor);
 		StdDraw.line(s.getLocation().x(), s.getLocation().y(), d.getLocation().x(), d.getLocation().y());
 		StdDraw.setPenColor(Color.black);
-		StdDraw.text((s.getLocation().x()+d.getLocation().x())/2, (s.getLocation().y()+d.getLocation().y())/2, String.format("%.1f", e.getWeight()));
 		double tempx = (s.getLocation().x()+d.getLocation().x())/2;
 		double tempy = (s.getLocation().y()+d.getLocation().y())/2;
 		tempx = (tempx+d.getLocation().x())/2;
@@ -801,6 +800,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		tempx = (tempx+d.getLocation().x())/2;
 		tempy = (tempy+d.getLocation().y())/2;
 		StdDraw.circle(tempx, tempy, 0.2);
+		StdDraw.text(tempx, tempy+0.5 , String.format("%.1f", e.getWeight()));
+
 	}
 
 	/****************algo draws ******************************************/
