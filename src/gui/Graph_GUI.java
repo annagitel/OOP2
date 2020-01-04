@@ -25,7 +25,7 @@ public class Graph_GUI {
         g.connect(2,4,1);
         g.connect(4,5,7);
         g.connect(1,3,3);
-        g.connect(3,5,4);
+       // g.connect(3,5,4);
         g.connect(5,1,6);
         g.connect(1,5,1);
 

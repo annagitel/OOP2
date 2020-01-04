@@ -51,9 +51,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DirectColorModel;
 import java.awt.image.WritableRaster;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -735,7 +733,6 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		algoItem1.addActionListener(std);
 		algoItem2.addActionListener(std);
 		algoItem3.addActionListener(std);
-		ActionEvent algo1 = new ActionEvent(algoItem1,0,"",0);
 
 		return menuBar;
 	}
@@ -888,6 +885,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	}
 
 	public static void tspDraw(){
+		drawDefault();
 		Collection<node_data> c = gui_graph.getV();
 		ArrayList<Integer> keys = new ArrayList<>();
 		for (node_data n:c) {
@@ -1870,33 +1868,17 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 				break;
 			}
 			case " Save to File (as binary file) ":{
-				FileDialog chooser = new FileDialog(StdDraw.frame, "choose file path and name", FileDialog.SAVE);
-				chooser.setFile("*.txt");
-				chooser.setFilenameFilter(new FilenameFilter() {
-					@Override
-					public boolean accept(File dir, String name) {
-						return name.endsWith(".txt");
-					}
-				});
-				chooser.setVisible(true);
-				String filename = chooser.getFile();
-				if (filename != null) {
-					gui_algo.save(filename);
-				}
+				String pathname = io("enter file name ", FileDialog.SAVE);
+				this.gui_algo.save(pathname);
 				break;
 			}
 			case " Open from file ":{
-				FileDialog chooser = new FileDialog(StdDraw.frame, "choose file", FileDialog.LOAD);
-				chooser.setFile("*.txt");
-				chooser.setFilenameFilter(new FilenameFilter() {
-					@Override
-					public boolean accept(File dir, String name) {
-						return name.endsWith(".txt");
-					}
-				});
-				chooser.setVisible(true);
-				String filename = chooser.getFile();
-				gui_algo.init(filename);
+				String pathname = io("choose file to load", FileDialog.LOAD);
+				this.gui_algo.init(pathname);
+				this.gui_graph = (DGraph) this.gui_algo.copy();
+				drawDefault();
+				break;
+
 			}
 			case " Is graph connected? ": {
 				isConnectedDraw();
@@ -1911,6 +1893,18 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		}
 	}
 
+	private String io(String text, int mode) {
+		FileDialog fd = new FileDialog(frame, text, mode);
+		fd.setFile("*.txt");
+		fd.setFilenameFilter(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".txt");
+			}
+		});
+		fd.setVisible(true);
+		return fd.getDirectory() + fd.getFile();
+	}
 
 	/***************************************************************************
 	 *  Mouse interactions.
