@@ -11,6 +11,8 @@ import dataStructure.*;
 import utils.*;
 import gui.*;
 
+import java.util.List;
+
 /**
  * EX2 Structure test:
  * 1. make sure your code compile with this dummy test (DO NOT Change a thing in this test).
@@ -56,10 +58,9 @@ class Ex2Test {
         return ans;
     }
     boolean drawGraph(graph g) {
-        Range x = new Range(0,25);
-        Range y = new Range(0,25);
-        StdDraw.drawGraph(500, 500, x,y,g);
-        //StdDraw.drawGraph(g);
+
+        StdDraw.drawGraph(g);
+
         return true;
 
     }

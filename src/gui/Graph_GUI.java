@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import javax.swing.*;
 
 
@@ -22,17 +23,24 @@ public class Graph_GUI {
 
         g.connect(1,2,2);
         g.connect(2,4,1);
-        g.connect(4,5,1);
-        g.connect(1,3,30);
-        g.connect(3,5,40);
-        g.connect(5,1,20);
+        g.connect(4,5,7);
+        g.connect(1,3,3);
+        g.connect(3,5,4);
+        g.connect(5,1,6);
         g.connect(1,5,1);
 
         Range x = new Range(0,25);
         Range y = new Range(0,25);
-        StdDraw.drawGraph(500, 500, x,y,g);
-        StdDraw.shortestDraw(1,5);
+        StdDraw.drawGraph(g);
+        //StdDraw.shortestDraw(1,5);
         //StdDraw.isConnectedDraw();
+        //LinkedList<Integer> tsp = new LinkedList<>();
+        //tsp.add(1);
+        //tsp.add(3);
+       // tsp.add(4);
+
+        //StdDraw.drawGraph(g);
+        //StdDraw.tspDraw(tsp);
 
     }
 }

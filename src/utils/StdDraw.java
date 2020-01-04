@@ -713,7 +713,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);            // closes all windows
 		// frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);      // closes only current window
-		frame.setTitle("Standard Draw");
+		frame.setTitle("Maze of Waze");
 		frame.setJMenuBar(createMenuBar());
 		frame.pack();
 		frame.requestFocusInWindow();
@@ -721,7 +721,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	}
 
 	// create the menu bar (changed to private)
-	private static JMenuBar createMenuBar() {
+	public static JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu file = new JMenu("File");
 		JMenu algo = new JMenu("Algo");
@@ -732,28 +732,47 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		JMenuItem algoItem1 = new JMenuItem(" Is graph connected? ");
 		JMenuItem algoItem2 = new JMenuItem(" Shortest path");
 		JMenuItem algoItem3 = new JMenuItem(" TSP ");
-		algoItem1.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
 
-			}
-		});
-		fileItem1.addActionListener(std);
-		fileItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		file.add(fileItem1);
 		file.add(fileItem2);
 		algo.add(algoItem1);
 		algo.add(algoItem2);
 		algo.add(algoItem3);
+		fileItem1.addActionListener(std);
+		fileItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		fileItem2.addActionListener(std);
+		algoItem1.addActionListener(std);
+		algoItem2.addActionListener(std);
+		algoItem3.addActionListener(std);
+
 		return menuBar;
+
 	}
 
-	public static void drawGraph(int width, int height, Range rx, Range ry, graph g) {
+
+
+
+	public static void drawGraph(graph g) {
 		setGraph(g);
-		StdDraw.setCanvasSize(width,height);                                           // set canvas size
-		StdDraw.setYscale(ry.get_min(),ry.get_max());                                  // set X line
-		StdDraw.setXscale(rx.get_min(),rx.get_max());                                  // set Y line
+		StdDraw.setCanvasSize(750,750);                                           // set canvas size
+		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy= -Double.MAX_VALUE;
+		Collection<node_data> nodes = g.getV();
+		for (node_data n:nodes) {
+			if (n.getLocation().x() <minx)
+				minx = n.getLocation().x();
+			if (n.getLocation().y()<miny)
+				miny = n.getLocation().y();
+
+			if (n.getLocation().x() >maxx)
+				maxx = n.getLocation().x();
+			if (n.getLocation().y()>maxy)
+				maxy = n.getLocation().y();
+		}
+		double xrange = Math.abs(minx-maxx)/10;
+		double yrange = Math.abs(miny-maxy)/10;
+		StdDraw.setYscale(miny-yrange,maxy+yrange);                                  // set X line
+		StdDraw.setXscale(minx-xrange,maxx+xrange);                                  // set Y line
 		drawWithColors(Color.yellow, Color.black);
 	}
 
@@ -825,7 +844,15 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	public static void tspDraw(LinkedList<Integer> intList ){
 		graph_algorithms ga = new Graph_Algo();
 		ga.init(gui_graph);
+		System.out.println(intList);
 		LinkedList<node_data> list = (LinkedList<node_data>) ga.TSP(intList);
+		System.out.println(list);
+		int counter =1;
+		for (node_data n:list) {
+			drawNode(n, Color.blue);
+			StdDraw.text(n.getLocation().x(), n.getLocation().y()+0.5, String.valueOf(counter));
+			counter++;
+		}
 	}
 
 

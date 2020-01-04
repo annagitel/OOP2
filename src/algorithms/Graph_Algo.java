@@ -123,6 +123,7 @@ public class Graph_Algo implements graph_algorithms, Serializable {
             graph.getNode(dest).setWeight(w);
             graph.getNode(dest).setTag(whereW);
         }
+
     }
     private double sendTheWeight(int current, edge_data e){
         return graph.getNode(current).getWeight()+e.getWeight();
@@ -130,7 +131,9 @@ public class Graph_Algo implements graph_algorithms, Serializable {
     private void setTagForSrc(int current){
         for (edge_data e:graph.getE(current)) {
             graph.getNode(e.getDest()).setTag(current);
+
         }
+
     }
 
     @Override
@@ -140,12 +143,11 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         q.addAll(graph.getV());
         node_data current;
         graph.getNode(src).setWeight(0);
-        setTagForSrc(src);
         while (!q.isEmpty()) {
             current=q.remove();
             graph.getNode(current.getKey()).setInfo("true");
             if (graph.getE(current.getKey())!=null){
-
+                setTagForSrc(current.getKey());
                 for (edge_data e: graph.getE(current.getKey())) {
                     if (graph.getNode(e.getDest()).getInfo() == "false") {
                         setTheSmallWeight(e.getDest(), sendTheWeight(current.getKey(), e), current.getKey());
@@ -157,11 +159,11 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         }
         Stack<node_data> stack = new Stack<node_data>();
         stack.push(graph.getNode(dest));
-        int temp=graph.getNode(dest).getTag();//the node before dest
-        System.out.println(temp);/***************print***********/
+        int temp=graph.getNode(dest).getTag();//the tag of  node before dest
         stack.push(graph.getNode(temp));
         while (temp!=src){// if we didnt came to src
-            temp= graph.getNode(temp).getTag();
+            int temp2=graph.getNode(temp).getTag();
+            temp=temp2;
             stack.push(graph.getNode(temp));
         }
         while (!stack.empty()){
@@ -169,7 +171,7 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         }
         return answer;
     }
-    /********tsp********/
+
     @Override
     public List<node_data> TSP(List<Integer> targets) {
 
@@ -189,6 +191,7 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         return TSP;
 
     }
+
 
     @Override
     public graph copy() {
