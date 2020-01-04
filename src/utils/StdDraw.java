@@ -31,16 +31,7 @@ import algorithms.Graph_Algo;
 import algorithms.graph_algorithms;
 import dataStructure.*;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.FileDialog;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
+import java.awt.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,15 +58,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import java.util.*;
+import java.util.List;
 import javax.imageio.ImageIO;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 /**
  *  The {@code StdDraw} class provides a basic capability for
@@ -727,7 +713,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		JMenu algo = new JMenu("Algo");
 		menuBar.add(file);
 		menuBar.add(algo);
-		JMenuItem fileItem1 = new JMenuItem(" Save to file ");
+		JMenuItem fileItem1 = new JMenuItem(" Save to File ");
 		JMenuItem fileItem2 = new JMenuItem(" Open from file ");
 		JMenuItem algoItem1 = new JMenuItem(" Is graph connected? ");
 		JMenuItem algoItem2 = new JMenuItem(" Shortest path");
@@ -745,12 +731,10 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		algoItem1.addActionListener(std);
 		algoItem2.addActionListener(std);
 		algoItem3.addActionListener(std);
+		ActionEvent algo1 = new ActionEvent(algoItem1,0,"",0);
 
 		return menuBar;
-
 	}
-
-
 
 
 	public static void drawGraph(graph g) {
@@ -773,9 +757,11 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		double yrange = Math.abs(miny-maxy)/10;
 		StdDraw.setYscale(miny-yrange,maxy+yrange);                                  // set X line
 		StdDraw.setXscale(minx-xrange,maxx+xrange);                                  // set Y line
+		drawDefault();
+	}
+	private static void drawDefault(){
 		drawWithColors(Color.yellow, Color.black);
 	}
-
 	private static void drawWithColors(Color nodeColor, Color edgeColor){
 		Collection<node_data> nodes = gui_graph.getV();
 		Iterator<node_data> it = nodes.iterator();
@@ -825,27 +811,110 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 
 	/****************algo draws ******************************************/
 	public static void isConnectedDraw(){
+		drawDefault();
 		graph_algorithms ga = new Graph_Algo();
 		ga.init(gui_graph);
 		if(ga.isConnected()){
 			drawWithColors(Color.green, Color.green);
+			JOptionPane.showMessageDialog(frame, "The graph is connected.");
 		}
-		else
-			drawWithColors(Color.red,Color.red);
+		else {
+			drawWithColors(Color.red, Color.red);
+			JOptionPane.showMessageDialog(frame,
+					"The graph is not connected.",
+					"Message",
+					JOptionPane.ERROR_MESSAGE);		}
 	}
 
-	public static void shortestDraw(int a, int b){
-		List<node_data> list = (ArrayList<node_data>) gui_algo.shortestPath(a,b);
+	public static void shortestDraw(){
+		drawDefault();
+		int s=0, d=0;
+		Collection<node_data> c = gui_graph.getV();
+		ArrayList<Integer> keys = new ArrayList<>();
+		for (node_data n:c) {
+			keys.add(n.getKey());
+		}
+		boolean srcOk = false;
+		boolean destOk = false;
+		while(!srcOk) {
+			String src = (String) JOptionPane.showInputDialog(frame, "Choose source node: ");
+			try {
+				s = Integer.parseInt(src);
+				if (keys.contains(s)) {
+						srcOk = true;
+						break;
+				}
+				else {
+					JOptionPane.showMessageDialog(frame, "There is no such node, Try again");
+					break;
+				}
+			}
+			catch (Exception e){
+				JOptionPane.showMessageDialog(frame,
+						"Input must be Integer.",
+						"Message",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		while(!destOk) {
+			String dest = (String) JOptionPane.showInputDialog(frame, "Choose destination node: ");
+			try {
+				d = Integer.parseInt(dest);
+				if (keys.contains(s)) {
+					destOk = true;
+					break;
+				}
+				else {
+					JOptionPane.showMessageDialog(frame, "There is no such node, Try again");
+					break;
+				}
+			}
+			catch (Exception e){
+				JOptionPane.showMessageDialog(frame,
+						"Input must be Integer.",
+						"Message",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
+
+		List<node_data> list = (ArrayList<node_data>) gui_algo.shortestPath(s,d);
 		for (node_data n:list) {
 			drawNode(n, Color.blue);
 		}
 	}
 
-	public static void tspDraw(LinkedList<Integer> intList ){
+	public static void tspDraw(){
+		Collection<node_data> c = gui_graph.getV();
+		ArrayList<Integer> keys = new ArrayList<>();
+		for (node_data n:c) {
+			keys.add(n.getKey());
+		}
+		LinkedList<Integer> userList = new LinkedList<>();
+		int key = -2;
+		while (key!= -1){
+			String s = (String) JOptionPane.showInputDialog(frame, "Enter node number: (to finish, enter -1)");
+			try {
+				key = Integer.parseInt(s);
+				if (key == -1)
+					break;
+				else if (keys.contains(key)) {
+					userList.add(key);
+				}
+				else {
+					JOptionPane.showMessageDialog(frame, "There is no such node, Try again");
+				}
+			}
+			catch (Exception e){
+				JOptionPane.showMessageDialog(frame,
+						"Input must be Integer.",
+						"Message",
+						JOptionPane.ERROR_MESSAGE);
+			}
+		}
+
 		graph_algorithms ga = new Graph_Algo();
 		ga.init(gui_graph);
-		System.out.println(intList);
-		LinkedList<node_data> list = (LinkedList<node_data>) ga.TSP(intList);
+		LinkedList<node_data> list = (LinkedList<node_data>) ga.TSP(userList);
 		System.out.println(list);
 		int counter =1;
 		for (node_data n:list) {
@@ -1785,11 +1854,30 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		FileDialog chooser = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
-		chooser.setVisible(true);
-		String filename = chooser.getFile();
-		if (filename != null) {
-			StdDraw.save(chooser.getDirectory() + File.separator + chooser.getFile());
+		String command = e.getActionCommand();
+		switch (command){
+			case " Save to File ":{
+				FileDialog chooser = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
+				chooser.setVisible(true);
+				String filename = chooser.getFile();
+				if (filename != null) {
+					StdDraw.save(chooser.getDirectory() + File.separator + chooser.getFile());
+				}
+				break;
+			}
+			case " Open from file ":{
+
+			}
+			case " Is graph connected? ": {
+				isConnectedDraw();
+				break;
+			}
+			case " Shortest path":{
+				shortestDraw();
+			}
+			case " TSP ":{
+				tspDraw();
+			}
 		}
 	}
 
