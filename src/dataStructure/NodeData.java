@@ -2,44 +2,48 @@ package dataStructure;
 
 import utils.Point3D;
 
+import java.io.Serializable;
 
-public class NodeData implements node_data{
+
+public class NodeData implements node_data, Serializable {
     /********** private vars **************/
     private int key;
     private Point3D location;
-    private double weight;
-    private int tag;
+    private double weight= Double.MAX_VALUE;
+    private int tag=0;
     private String info = "false";
     /******** constarctors **********/
 
     public NodeData(int k, Point3D p){
         this.key = Math.abs(k);
         this.location = p;
-        this.weight = Double.MAX_VALUE;
-        this.tag = 0;
+    }
+    public NodeData(int key){
+        this.key=key;
+    }
+    public NodeData(int key, double weight){
+        this.key=key;
+        this.weight=weight;
     }
 
     public NodeData(){
-        this.key = 0;
+        this.key=0; //default
         this.location = new Point3D(0,0,0);
-        this.weight = Double.MAX_VALUE;
-        this.tag = 0;
+    }
+    public NodeData(int key, Point3D location , double weight,String info,int tag){
+        this.key=key;
+        this.location=location;
+        this.weight=weight;
+        this.info=info;
+        this.tag=tag;
     }
 
     public NodeData(Point3D p){
-        this.key = 0;
+        this.key = p.ix();
         this.location = p;
-        this.weight = Double.MAX_VALUE;
-        this.tag =  0;
     }
 
-    public NodeData(String s){
-        this.key = 0;
-        this.location = new Point3D(0,0,0);
-        this.weight = Double.MAX_VALUE;
-        this.tag = 0;
-        this.setInfo(s);
-    }
+
 
     /********* public methods ********/
 
@@ -78,18 +82,12 @@ public class NodeData implements node_data{
     public void setTag(int t) {
         this.tag = t;
     }
-
-    private boolean isValid(String s){
-        try {
-            Point3D p = new Point3D(s.substring(1,s.indexOf(')')));
-            double w = Double.parseDouble(s.substring(s.indexOf(',')+1,s.length()));
-        }
-        catch (Exception e){
-            return false;
-        }
-        finally {
-            return true;
-        }
+    @Override
+    public  String toString(){
+        return "key: "+this.getKey()+" Location: "+this.location+" Weight: "+this.weight+ " Info: "
+                +this.info +" Tag: "+this.tag;
     }
+
+
 
 }

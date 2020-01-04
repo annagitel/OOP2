@@ -1,23 +1,32 @@
 package dataStructure;
 
-public class EdgeData implements edge_data {
+import java.io.Serializable;
+
+public class EdgeData implements edge_data , Serializable {
     /********** private vars *************/
     private int source;
     private int destination;
     private double weight;
-    private int tag;
+    private String info="";
+    private int tag=0;
     /************ constructors ****************/
     public EdgeData(int s, int d, double w){
         this.source = s;
         this.destination = d;
         this.weight = w;
-        this.tag = 0;
     }
+    public EdgeData(int src, int dest, double weight, String info, int tag){
+        this.source=src;
+        this.destination=dest;
+        this.weight=weight;
+        this.info=info;
+        this.tag=tag;
+    }
+
     public EdgeData(String s){
         this.source = 0;
         this.destination = 0;
         this.weight = 0;
-        this.tag = 0;
         this.setInfo(s);
     }
     /*********** public methods ****************/
@@ -38,35 +47,20 @@ public class EdgeData implements edge_data {
     }
 
     public String getInfo() {
-        return ("Source: "+this.source+"\n Destination: "+this.destination+"\n Weight: "+this.weight+"\n Tag: "+this.tag);
+        return this.info;
     }
 
     public void setInfo(String s) {
-        String s1 = s.replace(" ","");
-        if(isValid(s1)){
-            String[] str = s1.split(",");
-            this.source = Integer.parseInt(str[0]);
-            this.destination = Integer.parseInt(str[1]);
-            this.weight = Double.parseDouble(str[2]);
-        }
+      this.info=s;
     }
 
     public void setTag(int t) {
         this.tag = t;
     }
 
-    private boolean isValid(String s){
-        try {
-            String[] str = s.split(",");
-            int src = Integer.parseInt(str[0]);
-            int dest = Integer.parseInt(str[1]);
-            Double w = Double.parseDouble(str[2]);
-        }
-        catch (Exception e){
-            return false;
-        }
-        finally {
-            return true;
-        }
+
+    @Override
+    public String toString(){
+        return "Src: "+this.source+ " Weight: "+this.weight+" Dest: "+this.destination+" Info: "+this.info+" Tag: "+this.tag;
     }
 }
