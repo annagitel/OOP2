@@ -14,12 +14,13 @@ public class nodeDataTest {
         assertEquals("false", n.getInfo());
         assertEquals(0,n.getTag());
         int k=1;
-        double w=7;
-        NodeData m=new NodeData(k,7);
+        Point3D n1= new Point3D(1,1,0);
+        NodeData m=new NodeData(k,n1,7);
         assertEquals(7,m.getWeight());
         assertEquals(1,m.getKey());
-        NodeData y= new NodeData(k);
-        assertEquals(1,y.getKey());
+        Point3D n2= new Point3D(2,2,0);
+        NodeData y= new NodeData(3,n2);
+        assertEquals(3,y.getKey());
         Point3D p=new Point3D(1,2,0);
         NodeData a= new NodeData(1,p,7,"blabla",2);
         assertEquals(1,a.getKey());
@@ -30,10 +31,11 @@ public class nodeDataTest {
     }
     @Test
     void getKey(){
-        NodeData n= new NodeData(1);
-        assertEquals(1, n.getKey());
-
-        NodeData n2= new NodeData(3,6);
+        Point3D n1= new Point3D(1,1,0);
+        NodeData m=new NodeData(1,n1,7);
+        assertEquals(1, m.getKey());
+        Point3D n= new Point3D(2,2,0);
+        NodeData n2= new NodeData(3,n);
         assertEquals(3, n2.getKey());
     }
     @Test
@@ -55,7 +57,7 @@ public class nodeDataTest {
         Point3D p=new Point3D(1,2,0);
         NodeData n= new NodeData(1,p,7,"blabla",2);
         assertEquals(7,n.getWeight());
-        NodeData n2= new NodeData(1,6);
+        NodeData n2= new NodeData(1,p,6);
         assertEquals(6,n2.getWeight());
     }
     @Test

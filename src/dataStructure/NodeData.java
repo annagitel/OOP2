@@ -18,13 +18,6 @@ public class NodeData implements node_data, Serializable {
         this.key = Math.abs(k);
         this.location = p;
     }
-    public NodeData(int key){
-        this.key=key;
-    }
-    public NodeData(int key, double weight){
-        this.key=key;
-        this.weight=weight;
-    }
 
     public NodeData(){
         this.key=0; //default
@@ -37,6 +30,12 @@ public class NodeData implements node_data, Serializable {
         this.info=info;
         this.tag=tag;
     }
+    public NodeData(int key, Point3D location , double weight){
+        this.key=key;
+        this.location=location;
+        this.weight=weight;
+    }
+
 
 
     public NodeData(Point3D p){
