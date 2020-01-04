@@ -1889,6 +1889,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			}
 			case " Shortest path":{
 				shortestDraw();
+				break;
 			}
 			case " TSP ":{
 				tspDraw();
