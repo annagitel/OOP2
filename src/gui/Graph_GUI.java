@@ -1,14 +1,6 @@
 package gui;
 import utils.*;
 import dataStructure.*;
-import algorithms.*;
-import java.awt.*;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import javax.swing.*;
 
 
 public class Graph_GUI {
@@ -25,7 +17,7 @@ public class Graph_GUI {
         g.connect(2,4,1);
         g.connect(4,5,7);
         g.connect(1,3,3);
-       // g.connect(3,5,4);
+        //g.connect(3,5,4);
         g.connect(5,1,6);
         g.connect(1,5,1);
 
