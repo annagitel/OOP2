@@ -38,6 +38,7 @@ public class NodeData implements node_data, Serializable {
         this.tag=tag;
     }
 
+
     public NodeData(Point3D p){
         this.key = p.ix();
         this.location = p;

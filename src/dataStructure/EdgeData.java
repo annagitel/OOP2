@@ -15,6 +15,9 @@ public class EdgeData implements edge_data , Serializable {
         this.destination = d;
         this.weight = w;
     }
+    public EdgeData(){
+        this.tag=0;
+    }
     public EdgeData(int src, int dest, double weight, String info, int tag){
         this.source=src;
         this.destination=dest;
