@@ -12,7 +12,6 @@ public class DGraph implements graph, Serializable {
 	private HashMap<Integer, HashMap<Integer, edge_data>> edges;
 	private HashMap<Integer, node_data> nodes;
 	public int modeCount =0;
-	private int nodeCount = 1;
 
 	/************constractors*****************/
 
@@ -45,35 +44,29 @@ public class DGraph implements graph, Serializable {
 	public DGraph(node_data n){ // init with one node
 		this.nodes = new HashMap<>();
 		this.edges = new HashMap<>();
-		this.nodes.put(nodeCount, n);
-		this.nodeCount++;
+		this.nodes.put(n.getKey(),n);
+
 	}
 
 	/********** public methods ******************/
+	@Override
 	public node_data getNode(int key) {
+
 		return nodes.get(key);
 	}
-
+@Override
 	public edge_data getEdge(int src, int dest) {
+
 		return edges.get(src).get(dest);
 	}
 
+	@Override
 	public void addNode(node_data n) {
-		NodeData newn = new NodeData(nodeCount, n.getLocation());
-		this.nodes.put(this.nodeCount, newn);
-		this.nodeCount++;
-	}
+		if(!nodes.containsKey(n.getKey())) {
+			nodes.put(n.getKey(), n);
+			modeCount++;
 
-	public void addNode(Point3D l){
-		NodeData newn = new NodeData(nodeCount, l);
-		this.nodes.put(this.nodeCount, newn);
-		this.nodeCount++;
-	}
-
-	public void addNode(String s){
-		NodeData newn = new NodeData(nodeCount, new Point3D(s));
-		this.nodes.put(this.nodeCount, newn);
-		this.nodeCount++;
+		}
 	}
 
 	public void connect(int src, int dest, double w) {
@@ -88,6 +81,8 @@ public class DGraph implements graph, Serializable {
 			edges.put(src, new HashMap<>());
 			edges.get(src).put(dest,ed);
 		}
+		modeCount++;
+
 	}
 
 	public Collection<node_data> getV() {
@@ -102,10 +97,6 @@ public class DGraph implements graph, Serializable {
 			return null;
 	}
 
-	public Collection<Integer> nodesWithEdges(){
-		Collection<Integer> c = edges.keySet();
-		return c;
-	}
 
 	public node_data removeNode(int key) {
 		NodeData n = (NodeData) nodes.get(key);
@@ -114,6 +105,7 @@ public class DGraph implements graph, Serializable {
 		if(edges.containsKey(key)){
 			edges.remove(key);
 		}
+		modeCount++;
 		return n;
 	}
 
@@ -122,6 +114,7 @@ public class DGraph implements graph, Serializable {
 		edges.get(src).remove(dest);
 		if (edges.get(src).isEmpty())
 			edges.remove(src);
+		modeCount++;
 
 		return e;
 	}
@@ -131,7 +124,14 @@ public class DGraph implements graph, Serializable {
 	}
 
 	public int edgeSize() {
-		return edges.size();
+
+		int num=0;
+
+		for (Integer src: edges.keySet()) {
+			num+=edges.get(src).size();
+
+		}
+		return num;
 	}
 
 	public int getMC() {
