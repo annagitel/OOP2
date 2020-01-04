@@ -924,7 +924,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		int counter =1;
 		for (node_data n:list) {
 			drawNode(n, Color.blue);
-			StdDraw.text(n.getLocation().x(), n.getLocation().y()+0.5, String.valueOf(counter));
+			setPenColor(RED);
+			StdDraw.text(n.getLocation().x(), n.getLocation().y()+nodeRadius*1.5, String.valueOf(counter));
 			counter++;
 		}
 	}
