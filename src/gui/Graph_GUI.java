@@ -7,11 +7,11 @@ public class Graph_GUI {
 
     public static void main(String[] args) {
         DGraph g = new DGraph();
-        Point3D p1=new Point3D(1,1,0);
-        Point3D p2=new Point3D(1,2,0);
-        Point3D p3=new Point3D(3,1,0);
-        Point3D p4=new Point3D(4,4,0);
-        Point3D p5=new Point3D(5,3,0);
+        Point3D p1=new Point3D(1,18,0);
+        Point3D p2=new Point3D(100,25,0);
+        Point3D p3=new Point3D(30,1,0);
+        Point3D p4=new Point3D(13,40,0);
+        Point3D p5=new Point3D(50,7,0);
         NodeData n1= new NodeData(1,p1);
         NodeData n2= new NodeData(2,p2);
         NodeData n3= new NodeData(3,p3);

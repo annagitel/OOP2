@@ -472,6 +472,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		gui_graph = (DGraph) g;
 		gui_algo.init(g);
 	}
+	public static double nodeRadius = 0;
 	/**
 	 *  The color black.
 	 */
@@ -740,7 +741,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 
 	public static void drawGraph(graph g) {
 		setGraph(g);
-		StdDraw.setCanvasSize(750,750);                                           // set canvas size
+		                                         // set canvas size
 		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy= -Double.MAX_VALUE;
 		Collection<node_data> nodes = g.getV();
 		for (node_data n:nodes) {
@@ -756,6 +757,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		}
 		double xrange = Math.abs(minx-maxx)/10;
 		double yrange = Math.abs(miny-maxy)/10;
+		nodeRadius = xrange/5;
+		StdDraw.setCanvasSize(750, 750);
 		StdDraw.setYscale(miny-yrange,maxy+yrange);                                  // set X line
 		StdDraw.setXscale(minx-xrange,maxx+xrange);                                  // set Y line
 		drawDefault();
@@ -787,10 +790,10 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	public static void drawNode(node_data n, Color nodeColor){
 		StdDraw.setPenRadius(0.001);                                                   // set pen radius
 		StdDraw.setPenColor(nodeColor);
-		StdDraw.filledCircle(n.getLocation().x(), n.getLocation().y(), 0.5);
+		StdDraw.filledCircle(n.getLocation().x(), n.getLocation().y(), nodeRadius);
 		StdDraw.setPenColor(Color.black);
 		StdDraw.setPenRadius(0.001);
-		StdDraw.circle(n.getLocation().x(), n.getLocation().y(), 0.5);
+		StdDraw.circle(n.getLocation().x(), n.getLocation().y(), nodeRadius);
 		StdDraw.text(n.getLocation().x(), n.getLocation().y(), String.valueOf(n.getKey()));
 	}
 	private static void drawEdge(edge_data e, Color edgeColor){
@@ -805,8 +808,8 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		tempy = (tempy+d.getLocation().y())/2;
 		tempx = (tempx+d.getLocation().x())/2;
 		tempy = (tempy+d.getLocation().y())/2;
-		StdDraw.circle(tempx, tempy, 0.2);
-		StdDraw.text(tempx, tempy+0.5 , String.format("%.1f", e.getWeight()));
+		StdDraw.circle(tempx, tempy, nodeRadius/2);
+		StdDraw.text(tempx, tempy+nodeRadius , String.format("%.1f", e.getWeight()));
 
 	}
 
