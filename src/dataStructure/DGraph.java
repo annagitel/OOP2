@@ -1,12 +1,14 @@
 package dataStructure;
 
 import utils.Point3D;
+
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
 
-public class DGraph implements graph {
+public class DGraph implements graph, Serializable {
 	private HashMap<Integer, HashMap<Integer, edge_data>> edges;
 	private HashMap<Integer, node_data> nodes;
 	public int modeCount =0;
@@ -19,9 +21,6 @@ public class DGraph implements graph {
 		this.edges = new HashMap<>();
 	}
 
-	public DGraph (String fileName){ //init from file
-
-	}
 
 	public DGraph(graph g){ //copy constructor
 		Collection<node_data> n = g.getV();

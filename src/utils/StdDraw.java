@@ -52,6 +52,7 @@ import java.awt.image.DirectColorModel;
 import java.awt.image.WritableRaster;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 import java.net.MalformedURLException;
@@ -713,14 +714,16 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		JMenu algo = new JMenu("Algo");
 		menuBar.add(file);
 		menuBar.add(algo);
-		JMenuItem fileItem1 = new JMenuItem(" Save to File ");
-		JMenuItem fileItem2 = new JMenuItem(" Open from file ");
+		JMenuItem fileItem1 = new JMenuItem(" Save to File (as photo) ");
+		JMenuItem fileItem2 = new JMenuItem(" Save to File (as binary file) ");
+		JMenuItem fileItem3 = new JMenuItem(" Open from file ");
 		JMenuItem algoItem1 = new JMenuItem(" Is graph connected? ");
 		JMenuItem algoItem2 = new JMenuItem(" Shortest path");
 		JMenuItem algoItem3 = new JMenuItem(" TSP ");
 
 		file.add(fileItem1);
 		file.add(fileItem2);
+		file.add(fileItem3);
 		algo.add(algoItem1);
 		algo.add(algoItem2);
 		algo.add(algoItem3);
@@ -728,6 +731,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		fileItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		fileItem2.addActionListener(std);
+		fileItem3.addActionListener(std);
 		algoItem1.addActionListener(std);
 		algoItem2.addActionListener(std);
 		algoItem3.addActionListener(std);
@@ -1856,7 +1860,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		switch (command){
-			case " Save to File ":{
+			case " Save to File (as photo) ":{
 				FileDialog chooser = new FileDialog(StdDraw.frame, "Use a .png or .jpg extension", FileDialog.SAVE);
 				chooser.setVisible(true);
 				String filename = chooser.getFile();
@@ -1865,8 +1869,34 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 				}
 				break;
 			}
+			case " Save to File (as binary file) ":{
+				FileDialog chooser = new FileDialog(StdDraw.frame, "choose file path and name", FileDialog.SAVE);
+				chooser.setFile("*.txt");
+				chooser.setFilenameFilter(new FilenameFilter() {
+					@Override
+					public boolean accept(File dir, String name) {
+						return name.endsWith(".txt");
+					}
+				});
+				chooser.setVisible(true);
+				String filename = chooser.getFile();
+				if (filename != null) {
+					gui_algo.save(filename);
+				}
+				break;
+			}
 			case " Open from file ":{
-
+				FileDialog chooser = new FileDialog(StdDraw.frame, "choose file", FileDialog.LOAD);
+				chooser.setFile("*.txt");
+				chooser.setFilenameFilter(new FilenameFilter() {
+					@Override
+					public boolean accept(File dir, String name) {
+						return name.endsWith(".txt");
+					}
+				});
+				chooser.setVisible(true);
+				String filename = chooser.getFile();
+				gui_algo.init(filename);
 			}
 			case " Is graph connected? ": {
 				isConnectedDraw();

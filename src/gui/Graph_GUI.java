@@ -29,18 +29,7 @@ public class Graph_GUI {
         g.connect(5,1,6);
         g.connect(1,5,1);
 
-        Range x = new Range(0,25);
-        Range y = new Range(0,25);
         StdDraw.drawGraph(g);
-        //StdDraw.shortestDraw(1,5);
-        //StdDraw.isConnectedDraw();
-        //LinkedList<Integer> tsp = new LinkedList<>();
-        //tsp.add(1);
-        //tsp.add(3);
-       // tsp.add(4);
-
-        //StdDraw.drawGraph(g);
-        //StdDraw.tspDraw(tsp);
 
     }
 }
