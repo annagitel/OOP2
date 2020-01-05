@@ -842,6 +842,9 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		boolean destOk = false;
 		while(!srcOk) {
 			String src = (String) JOptionPane.showInputDialog(frame, "Choose source node: ");
+			if (src ==null)
+				break;
+			System.out.println(src);
 			try {
 				s = Integer.parseInt(src);
 				if (keys.contains(s)) {
@@ -860,8 +863,10 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 						JOptionPane.ERROR_MESSAGE);
 			}
 		}
-		while(!destOk) {
+		while(!destOk && srcOk) {
 			String dest = (String) JOptionPane.showInputDialog(frame, "Choose destination node: ");
+			if(dest == null)
+				break;
 			try {
 				d = Integer.parseInt(dest);
 				if (keys.contains(s)) {
@@ -899,8 +904,10 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		}
 		LinkedList<Integer> userList = new LinkedList<>();
 		int key = -2;
-		while (key!= -1){
-			String s = (String) JOptionPane.showInputDialog(frame, "Enter node number: (to finish, enter -1)");
+		while (true){
+			String s = (String) JOptionPane.showInputDialog(frame, "Enter node number: (to finish, press cancel)");
+			if (s == null)
+				break;
 			try {
 				key = Integer.parseInt(s);
 				if (key == -1)
