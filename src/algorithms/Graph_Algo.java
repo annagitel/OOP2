@@ -24,10 +24,19 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         init(graph);
     }
 
+    /**
+     *
+     init our graph from givven graph
+     */
     @Override
     public void init(graph g) {
         this.graph = g;
     }
+
+    /**
+     * int our graph from givven string
+     * @param file_name
+     */
 
     @Override
     public void init(String file_name) {
@@ -45,6 +54,11 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         }
     }
 
+    /**
+     * save to file from givven string
+     * @param file_name
+     */
+
     @Override
     public void save(String file_name) {
         try {
@@ -58,7 +72,11 @@ public class Graph_Algo implements graph_algorithms, Serializable {
             e.printStackTrace();
         }
     }
-    /****is connected****/
+
+    /**
+     * check if the grapg is full connecteg
+     * @return
+     */
     public boolean isConnected() {
         for (node_data node: graph.getV()) {
             if (!isCon(node.getKey()))
@@ -67,6 +85,12 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         }
         return true;
     }
+
+    /**
+     * check if we been throw all nodes by checking their tags
+     * @param node_key
+     * @return
+     */
 
     private boolean isCon (int node_key){
         changeTags(node_key);
@@ -77,6 +101,10 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         return true;
     }
 
+    /**
+     * change all node's tags
+     * @param node_key
+     */
     private void changeTags (int node_key){
         for (node_data node: graph.getV()) {
             int key = node.getKey();
@@ -92,6 +120,9 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         }
     }
 
+    /**
+     * init all node's tags to zero
+     */
     private void zeroTags(){
         Collection<node_data> n = graph.getV();
         Iterator<node_data> it = n.iterator();
@@ -110,7 +141,11 @@ public class Graph_Algo implements graph_algorithms, Serializable {
             }
         }
     }
-    /******shortest********/
+
+    /**
+     *
+     check the shortest path between src and dest
+     */
 
     @Override
     public List<node_data> shortestPath(int src, int dest) {
@@ -152,6 +187,13 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         return myBoardList.get(dest);
     }
 
+    /**
+     * update the board
+     * @param board
+     * @param myedge
+     * @param map
+     * @return
+     */
     private boolean updateBoard(HashMap<Integer, Double> board, edge_data myedge, HashMap<Integer, LinkedList<node_data>> map) {
         int dest = myedge.getDest();
         int src = myedge.getSrc();
@@ -172,6 +214,13 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         }
         return true;
     }
+
+    /**
+     * return the shortest path between src and dest
+     * @param src - start node
+     * @param dest - end (target) node
+     * @return
+     */
     @Override
     public double shortestPathDist(int src, int dest) {
         if (graph.getNode(src) == null || graph.getNode(dest) == null)
@@ -205,6 +254,12 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         return myBoard.get(dest);
     }
 
+    /**
+     * update givven board
+     * @param board
+     * @param myedge
+     * @return
+     */
     private boolean updateBoard(HashMap<Integer, Double> board, edge_data myedge) {
         int dest = myedge.getDest();
         int src = myedge.getSrc();
@@ -221,6 +276,11 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         return true;
     }
 
+    /**
+     * set the smallest weight
+     * @param myList
+     * @return
+     */
     private int minInArray(List<edge_data> myList) {
         if (!myList.isEmpty()) {
             int minWE = 0;
@@ -233,6 +293,12 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         }
         return -1;
     }
+
+    /**
+     * return the shortest path between all targets
+     * @param targets
+     * @return
+     */
 
     @Override
     public List<node_data> TSP(List<Integer> targets) {
@@ -254,7 +320,10 @@ public class Graph_Algo implements graph_algorithms, Serializable {
 
     }
 
-
+    /**
+     * deep copy to our graph
+     * @return
+     */
     @Override
     public graph copy() {
         graph copyGraph = new DGraph();
