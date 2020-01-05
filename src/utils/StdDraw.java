@@ -881,7 +881,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			}
 		}
 		double dist = gui_algo.shortestPathDist(s,d);
-		List<node_data> list = (ArrayList<node_data>) gui_algo.shortestPath(s,d);
+		List<node_data> list = gui_algo.shortestPath(s,d);
 		for (node_data n:list) {
 			drawNode(n, Color.blue);
 		}

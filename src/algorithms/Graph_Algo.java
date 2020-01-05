@@ -80,11 +80,13 @@ public class Graph_Algo implements graph_algorithms, Serializable {
     private void changeTags (int node_key){
         for (node_data node: graph.getV()) {
             int key = node.getKey();
-            for (edge_data edge: graph.getE(key)) {
-                int d = edge.getDest();
-                if (graph.getNode(d).getTag() != 1) {
-                    graph.getNode(d).setTag(1);
-                    changeTags(d);
+            if (graph.getE(key)!=null) {
+                for (edge_data edge : graph.getE(key)) {
+                    int d = edge.getDest();
+                    if (graph.getNode(d).getTag() != 1) {
+                        graph.getNode(d).setTag(1);
+                        changeTags(d);
+                    }
                 }
             }
         }
@@ -109,67 +111,127 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         }
     }
     /******shortest********/
-    @Override
-    public double shortestPathDist(int src, int dest) {
-        List<node_data> path= shortestPath(src,dest);
-        double answer=0;
-        for (node_data nodesInPath:	path) {
-            answer+=nodesInPath.getWeight();
-        }
-        return answer;
-    }
-    private void setTheSmallWeight(int dest, double w,int whereW){
-        if (graph.getNode(dest).getWeight()>w){
-            graph.getNode(dest).setWeight(w);
-            graph.getNode(dest).setTag(whereW);
-        }
-
-    }
-    private double sendTheWeight(int current, edge_data e){
-        return graph.getNode(current).getWeight()+e.getWeight();
-    }
-    private void setTagForSrc(int current){
-        for (edge_data e:graph.getE(current)) {
-            graph.getNode(e.getDest()).setTag(current);
-
-        }
-
-    }
 
     @Override
     public List<node_data> shortestPath(int src, int dest) {
-        List<node_data> answer= new ArrayList<>();
-        PriorityQueue<node_data> q = new PriorityQueue<node_data>(graph.getV().size(), new v_Comp());
-        q.addAll(graph.getV());
-        node_data current;
-        graph.getNode(src).setWeight(0);
-        while (!q.isEmpty()) {
-            current=q.remove();
-            graph.getNode(current.getKey()).setInfo("true");
-            if (graph.getE(current.getKey())!=null){
-                setTagForSrc(current.getKey());
-                for (edge_data e: graph.getE(current.getKey())) {
-                    if (graph.getNode(e.getDest()).getInfo() == "false") {
-                        setTheSmallWeight(e.getDest(), sendTheWeight(current.getKey(), e), current.getKey());
-                    }
+        if (graph.getNode(src) == null || graph.getNode(dest) == null)
+            throw new RuntimeException("src or dst dose not exist");
+        if (src == dest) {
+            List<node_data> t = new LinkedList<>();
+            t.add(graph.getNode(src));
+            return t;
+        }
+        HashMap<Integer, Double> myBoard = new LinkedHashMap<>();
+        HashMap<Integer, LinkedList<node_data>> myBoardList = new LinkedHashMap<>();
+        Queue<Integer> myQueue = new LinkedList<>();
+        int current;
+        boolean desH = false;
+        myQueue.add(src);
+        myBoard.put(src, 0.0);
+        LinkedList<node_data> temp = new LinkedList<>();
+        temp.add(graph.getNode(src));
+        myBoardList.put(src, temp);
+        while (!myQueue.isEmpty()) {
+            current = myQueue.poll();
+            if (current == dest) {
+                desH = true;
+            } else desH = false;
+            if (graph.getE(current) != null) {
+                ArrayList<edge_data> myEData = new ArrayList<>(graph.getE(current));
+                boolean flag = true;
+                while (!desH && flag) {
+                    int minIndex = minInArray(myEData);
+                    if (minIndex != -1) {
+                        edge_data minE = myEData.remove(minIndex);
+                        if (updateBoard(myBoard, minE, myBoardList))
+                            myQueue.add(minE.getDest());
+                    } else flag = false;
                 }
-
             }
+        }
+        return myBoardList.get(dest);
+    }
 
+    private boolean updateBoard(HashMap<Integer, Double> board, edge_data myedge, HashMap<Integer, LinkedList<node_data>> map) {
+        int dest = myedge.getDest();
+        int src = myedge.getSrc();
+        LinkedList<node_data> list = map.get(src);
+        double amount = myedge.getWeight() + board.get(src);
+        if (!board.containsKey(dest)) {
+            LinkedList<node_data> tempList = new LinkedList<>(list);
+            tempList.add(graph.getNode(dest));
+            board.put(dest, amount);
+            map.put(dest, tempList);
+        } else {
+            if (board.get(dest) > amount) {
+                LinkedList<node_data> tempList = new LinkedList<>(list);
+                tempList.add(graph.getNode(dest));
+                board.put(dest, amount);
+                map.put(dest, tempList);
+            } else return false;
         }
-        Stack<node_data> stack = new Stack<node_data>();
-        stack.push(graph.getNode(dest));
-        int temp=graph.getNode(dest).getTag();//the tag of  node before dest
-        stack.push(graph.getNode(temp));
-        while (temp!=src){// if we didnt came to src
-            int temp2=graph.getNode(temp).getTag();
-            temp=temp2;
-            stack.push(graph.getNode(temp));
+        return true;
+    }
+    @Override
+    public double shortestPathDist(int src, int dest) {
+        if (graph.getNode(src) == null || graph.getNode(dest) == null)
+            throw new RuntimeException("src or dst dose not exist");
+        if (src == dest) return 0;
+        HashMap<Integer, Double> myBoard = new LinkedHashMap<>();
+        Queue<Integer> myQueue = new LinkedList<>();
+        int current;
+        boolean desH = false;
+        myQueue.add(src);
+        myBoard.put(src, 0.0);
+        while (!myQueue.isEmpty()) {
+            current = myQueue.poll();
+            if (current == dest) {
+                desH = true;
+            } else desH = false;
+            if (graph.getE(current) != null) {
+
+                ArrayList<edge_data> myEData = new ArrayList<>(graph.getE(current));
+                boolean flag = true;
+                while (!desH && flag) {
+                    int minIndex = minInArray(myEData);
+                    if (minIndex != -1) {
+                        edge_data minE = myEData.remove(minIndex);
+                        if (updateBoard(myBoard, minE))
+                            myQueue.add(minE.getDest());
+                    } else flag = false;
+                }
+            }
         }
-        while (!stack.empty()){
-            answer.add(stack.pop());
+        return myBoard.get(dest);
+    }
+
+    private boolean updateBoard(HashMap<Integer, Double> board, edge_data myedge) {
+        int dest = myedge.getDest();
+        int src = myedge.getSrc();
+        double amount = myedge.getWeight() + board.get(src);
+        if (!board.containsKey(dest)) {
+            board.put(dest, amount);
+        } else {
+            if (board.get(dest) > amount) {
+                board.put(dest, amount);
+            } else {
+                return false;
+            }
         }
-        return answer;
+        return true;
+    }
+
+    private int minInArray(List<edge_data> myList) {
+        if (!myList.isEmpty()) {
+            int minWE = 0;
+            for (int i = 1; i < myList.size(); i++) {
+                if (myList.get(minWE).getWeight() > myList.get(i).getWeight()) {
+                    minWE = i;
+                }
+            }
+            return minWE;
+        }
+        return -1;
     }
 
     @Override
@@ -212,15 +274,4 @@ public class Graph_Algo implements graph_algorithms, Serializable {
         return copyGraph;
     }
 
-    private class v_Comp implements Comparator<node_data> {
-        public v_Comp() {
-        }
-
-        @Override
-        public int compare(node_data v2, node_data v1) {
-            if (v1.getWeight() - v2.getWeight() > 0)
-                return -1;
-            else return 1;
-        }
-    }
 }
