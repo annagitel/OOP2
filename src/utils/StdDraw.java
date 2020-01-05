@@ -655,7 +655,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 	 * @throws IllegalArgumentException unless both {@code canvasWidth} and
 	 *         {@code canvasHeight} are positive
 	 */
-	/*****************************************************************************************************************/
+
 	public static void setCanvasSize(int canvasWidth, int canvasHeight) {
 		if (canvasWidth <= 0 || canvasHeight <= 0)
 			throw new IllegalArgumentException("width and height must be positive");
@@ -664,7 +664,9 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		init();
 	}
 
-	// init
+	/**
+	 * init Jfarame
+	 */
 	private static void init() {
 		if (frame != null) frame.setVisible(false);
 		frame = new JFrame();
@@ -738,7 +740,10 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		return menuBar;
 	}
 
-
+	/**
+	 * main graph drawing function
+	 * @param g THE GRAPH
+	 */
 	public static void drawGraph(graph g) {
 		setGraph(g);
 		                                         // set canvas size
@@ -763,10 +768,10 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		StdDraw.setXscale(minx-xrange,maxx+xrange);                                  // set Y line
 		drawDefault();
 	}
-	private static void drawDefault(){
+	private static void drawDefault(){ //draw graph with default colors
 		drawWithColors(Color.yellow, Color.black);
 	}
-	private static void drawWithColors(Color nodeColor, Color edgeColor){
+	private static void drawWithColors(Color nodeColor, Color edgeColor){ //draw graph with given colors
 		Collection<node_data> nodes = gui_graph.getV();
 		Iterator<node_data> it = nodes.iterator();
 		StdDraw.setPenColor(StdDraw.BLACK);
@@ -787,33 +792,35 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 			drawNode(current, nodeColor);
 		}
 	}
-	public static void drawNode(node_data n, Color nodeColor){
-		StdDraw.setPenRadius(0.001);                                                   // set pen radius
+	public static void drawNode(node_data n, Color nodeColor){ //draw the node with all its components
+		StdDraw.setPenRadius(0.001);
 		StdDraw.setPenColor(nodeColor);
-		StdDraw.filledCircle(n.getLocation().x(), n.getLocation().y(), nodeRadius);
+		StdDraw.filledCircle(n.getLocation().x(), n.getLocation().y(), nodeRadius); //fill node
 		StdDraw.setPenColor(Color.black);
 		StdDraw.setPenRadius(0.001);
-		StdDraw.circle(n.getLocation().x(), n.getLocation().y(), nodeRadius);
-		StdDraw.text(n.getLocation().x(), n.getLocation().y(), String.valueOf(n.getKey()));
+		StdDraw.circle(n.getLocation().x(), n.getLocation().y(), nodeRadius); //draw borders
+		StdDraw.text(n.getLocation().x(), n.getLocation().y(), String.valueOf(n.getKey())); // draw nods key
 	}
-	private static void drawEdge(edge_data e, Color edgeColor){
+	private static void drawEdge(edge_data e, Color edgeColor){ //draw edge
 		NodeData s = (NodeData) gui_graph.getNode(e.getSrc());
 		NodeData d = (NodeData) gui_graph.getNode(e.getDest());
 		StdDraw.setPenColor(edgeColor);
-		StdDraw.line(s.getLocation().x(), s.getLocation().y(), d.getLocation().x(), d.getLocation().y());
+		StdDraw.line(s.getLocation().x(), s.getLocation().y(), d.getLocation().x(), d.getLocation().y()); //draw line
 		StdDraw.setPenColor(Color.black);
-		double tempx = (s.getLocation().x()+d.getLocation().x())/2;
-		double tempy = (s.getLocation().y()+d.getLocation().y())/2;
+		double tempx = (s.getLocation().x()+d.getLocation().x())/2; //x for edge direction
+		double tempy = (s.getLocation().y()+d.getLocation().y())/2; //y for edge direction
 		tempx = (tempx+d.getLocation().x())/2;
 		tempy = (tempy+d.getLocation().y())/2;
 		tempx = (tempx+d.getLocation().x())/2;
 		tempy = (tempy+d.getLocation().y())/2;
-		StdDraw.circle(tempx, tempy, nodeRadius/2);
-		StdDraw.text(tempx, tempy+nodeRadius , String.format("%.1f", e.getWeight()));
+		StdDraw.circle(tempx, tempy, nodeRadius/2); // draw direction circle
+		StdDraw.text(tempx, tempy+nodeRadius , String.format("%.1f", e.getWeight())); // print edge weight
 
 	}
 
-	/****************algo draws ******************************************/
+	/**
+	 * function to draw graph green/red after calling isConnected from Graph_Algo
+	 */
 	public static void isConnectedDraw(){
 		drawDefault();
 		graph_algorithms ga = new Graph_Algo();
@@ -830,6 +837,9 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 					JOptionPane.ERROR_MESSAGE);		}
 	}
 
+	/**
+	 * function to draw path on graph after calling shorthestPath from Graph_Algo
+	 */
 	public static void shortestDraw(){
 		drawDefault();
 		int s=0, d=0;
@@ -894,7 +904,9 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 				"The distanse is "+String.valueOf(dist));
 	}
 
-
+	/**
+	 * function to draw path on graph after calling TSP from Graph_Algo
+	 */
 	public static void tspDraw(){
 		drawDefault();
 		Collection<node_data> c = gui_graph.getV();
@@ -1867,6 +1879,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 
 	/**
 	 * This method cannot be called directly.
+	 * this is the action listener of the menu
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -1908,6 +1921,7 @@ public final class StdDraw implements ActionListener, MouseListener, MouseMotion
 		}
 	}
 
+	//helper function to file io
 	private String io(String text, int mode) {
 		FileDialog fd = new FileDialog(frame, text, mode);
 		fd.setFile("*.txt");
