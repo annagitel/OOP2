@@ -7,10 +7,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
-
+/**
+* this class represents a Directed, weighted graph
+*
+**/
 public class DGraph implements graph, Serializable {
-	private HashMap<Integer, HashMap<Integer, edge_data>> edges;
-	private HashMap<Integer, node_data> nodes;
+	private HashMap<Integer, HashMap<Integer, edge_data>> edges; //graph edges
+	private HashMap<Integer, node_data> nodes; //graph nodes
 	public int modeCount =0;
 
 	/************constractors*****************/
@@ -50,21 +53,20 @@ public class DGraph implements graph, Serializable {
 
 	/********** public methods ******************/
 	@Override
-	public node_data getNode(int key) {
+	public node_data getNode(int key) { //returns node by key
 
 		return nodes.get(key);
 	}
-@Override
-	public edge_data getEdge(int src, int dest) {
-if (edges.get(src)==null||edges.get(src).get(dest)==null) {
-	return null;
+	@Override
+	public edge_data getEdge(int src, int dest) { //returns edge by source and dest
+		if (edges.get(src)==null||edges.get(src).get(dest)==null) {
+			return null;
 }
-	return edges.get(src).get(dest);
-
+		return edges.get(src).get(dest);
 	}
 
 	@Override
-	public void addNode(node_data n) {
+	public void addNode(node_data n) { // adds node to graph
 		if(!nodes.containsKey(n.getKey())) {
 			nodes.put(n.getKey(), n);
 			modeCount++;
@@ -72,7 +74,7 @@ if (edges.get(src)==null||edges.get(src).get(dest)==null) {
 		}
 	}
 
-	public void connect(int src, int dest, double w) {
+	public void connect(int src, int dest, double w) { //adds edge to graph
 		EdgeData ed = new EdgeData(src,dest,w);
 		if (edges.containsKey(src)){
 			if (edges.get(src).containsKey(dest))
@@ -88,12 +90,12 @@ if (edges.get(src)==null||edges.get(src).get(dest)==null) {
 
 	}
 
-	public Collection<node_data> getV() {
+	public Collection<node_data> getV() { //return collection of all nodes
 		Collection<node_data> c = nodes.values();
 		return c;
 	}
 
-	public Collection<edge_data> getE(int node_id) {
+	public Collection<edge_data> getE(int node_id) { //returns collection of all edges from given node
 		if(this.edges.containsKey(node_id))
 			return this.edges.get(node_id).values();
 		else
@@ -102,17 +104,20 @@ if (edges.get(src)==null||edges.get(src).get(dest)==null) {
 
 
 	public node_data removeNode(int key) {
-		NodeData n = (NodeData) nodes.get(key);
-		nodes.remove(key);
-
-		if(edges.containsKey(key)){
-			edges.remove(key);
+		edges.remove(key);
+		for(HashMap<Integer,edge_data> tempE:edges.values()){
+			if (tempE.containsValue(key)){
+				tempE.remove(key);
+			}
 		}
+
+		nodes.remove(key);
 		modeCount++;
-		return n;
+
+		return null;
 	}
 
-	public edge_data removeEdge(int src, int dest) {
+	public edge_data removeEdge(int src, int dest) { //removes edge
 		EdgeData e = (EdgeData) edges.get(src).get(dest);
 		edges.get(src).remove(dest);
 		if (edges.get(src).isEmpty())
@@ -122,22 +127,19 @@ if (edges.get(src)==null||edges.get(src).get(dest)==null) {
 		return e;
 	}
 
-	public int nodeSize() {
+	public int nodeSize() { //returns number of nodes n graph
 		return nodes.size();
 	}
 
-	public int edgeSize() {
-
+	public int edgeSize() { //returns number of edges in graph
 		int num=0;
-
 		for (Integer src: edges.keySet()) {
 			num+=edges.get(src).size();
-
 		}
 		return num;
 	}
 
-	public int getMC() {
+	public int getMC() { //returns mode count
 		return this.modeCount;
 	}
 

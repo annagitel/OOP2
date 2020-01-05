@@ -1,7 +1,11 @@
 package dataStructure;
 
 import java.io.Serializable;
-
+ /**
+  * this class represents edge in the graph
+  * the edge has source node, destinaton node and weight
+  *
+  **/
 public class EdgeData implements edge_data , Serializable {
     /********** private vars *************/
     private int source;
@@ -15,7 +19,7 @@ public class EdgeData implements edge_data , Serializable {
         this.destination = d;
         this.weight = w;
     }
-    public EdgeData(){
+    public EdgeData(){ //default constructor
         this.tag=0;
     }
     public EdgeData(int src, int dest, double weight, String info, int tag){
@@ -26,44 +30,38 @@ public class EdgeData implements edge_data , Serializable {
         this.tag=tag;
     }
 
-    public EdgeData(String s){
-        this.source = 0;
-        this.destination = 0;
-        this.weight = 0;
-        this.setInfo(s);
-    }
     /*********** public methods ****************/
-    public int getSrc() {
+    public int getSrc() { //returns source key
         return this.source;
     }
 
-    public int getDest() {
+    public int getDest() { //returns destination key
         return this.destination;
     }
 
-    public double getWeight() {
+    public double getWeight() { //returns edge weight
         return this.weight;
     }
 
-    public int getTag() {
+    public int getTag() { //returns edge tag
         return this.tag;
     }
 
-    public String getInfo() {
+    public String getInfo() { //returns edge info
         return this.info;
     }
 
-    public void setInfo(String s) {
+    public void setInfo(String s) { //sets info
       this.info=s;
     }
 
-    public void setTag(int t) {
+    public void setTag(int t) { //sets tag
         this.tag = t;
     }
 
 
     @Override
-    public String toString(){
+    public String toString(){ //returns a string representing the edge
         return "Src: "+this.source+ " Weight: "+this.weight+" Dest: "+this.destination+" Info: "+this.info+" Tag: "+this.tag;
     }
 }
