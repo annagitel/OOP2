@@ -2,6 +2,12 @@ package gui;
 import utils.*;
 import dataStructure.*;
 
+/**
+ * The Graph_GUI class is the main class to run the GUI frames from.
+ * It has a main function where graphs are generated and the StdDraw.drawGraph(g); command is called.
+ * note - the StdDraw is a singletone class which means that only one graph can be displayed
+ * (only one drawGraph call ) each time
+ */
 
 public class Graph_GUI {
 
@@ -35,7 +41,7 @@ public class Graph_GUI {
         g.connect(5,1,6);
         g.connect(1,5,1);
 
-        StdDraw.drawGraph(g);
+        StdDraw.drawGraph(g); //main call 
 
     }
 }
