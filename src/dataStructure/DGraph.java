@@ -56,8 +56,11 @@ public class DGraph implements graph, Serializable {
 	}
 @Override
 	public edge_data getEdge(int src, int dest) {
+if (edges.get(src)==null||edges.get(src).get(dest)==null) {
+	return null;
+}
+	return edges.get(src).get(dest);
 
-		return edges.get(src).get(dest);
 	}
 
 	@Override
